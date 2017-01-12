@@ -431,10 +431,14 @@ Reader 能够做到
 #+END_NOTES
 
 ** Free & Interpreter Pattern
+[[./images/free.jpg]]
 #+BEGIN_NOTES
+玩具 ...
 Effect isolation 的典型, Free Monad 能够将可变部分从处理流程中提取出来, 由一个或多个解释器来解释.
 #+END_NOTES
-[[images/free.jpg]]
+
+** Free & Interpreter Pattern
+[[./images/free2.jpg]]
 
 
 * Composable Monad
