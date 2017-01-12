@@ -426,7 +426,81 @@ val count = (for {
 #+BEGIN_NOTES
 Reader 能够做到
 - 在没有某种依赖时, 提供这种依赖的能力
-- 将代码片段组 Akka, Unfiltered, Scalatra
+- 将代码片段组合的能力
+- 只要在 Reader 内部, 任何地方都可以获得该上下文, 非常适合做 config 的注入.
+#+END_NOTES
+
+** Free & Interpreter Pattern
+#+BEGIN_NOTES
+Effect isolation 的典型, Free Monad 能够将可变部分从处理流程中提取出来, 由一个或多个解释器来解释.
+#+END_NOTES
+[[images/free.jpg]]
+
+
+* Composable Monad
+** Monad Transformer
+#+BEGIN_NOTES
+生产中, 由于业务逻辑的复杂程度不一, 很多情况下需要使用多个 Monad, 例如 ...
+因此, 需要将这些 Monad 结合在一起使用.
+#+END_NOTES
+
+#+BEGIN_SRC scala 
+def getApiEndpoint: Reader[Config, Either[Error, URI]] = ???
+def getCountFromApi(uri: URI): Reader[Config, Either[Error, Int]] = ???
+
+for {
+  eitherUri <- getApiEndpoint
+  eitherCount <- eitherUri match {
+    case Left(error) =>
+      pure[Config, Either[Error, URI]](eitherUri)
+    case Right(uri) =>
+      getCountFromApi(uri)
+  }
+} yield eitherCount
+#+END_SRC
+
+** EitherT
+#+BEGIN_SRC scala 
+def getApiEndpoint: EitherT[Reader[Config, ?], Error, URI] = ???
+def getCountFromApi(uri: URI): EitherT[Reader[Config, ?], Error, Int] = ???
+
+for {
+  uri <- getApiEndpoint
+  count <- getCountFromApi(uri)
+} yield count
+#+END_SRC
+
+** What about more?
+- Eff
+#+BEGIN_SRC scala 
+def getApiEndpoint[R : Reader[Config, ?] MemberIn ?]: Eff[R, URI] = 
+  send[Reader[Config, ?], R, URI](???)
+def getCountFromApi[R : Either[Error, ?] MemberIn ?](uri: URI): Eff[R, Int] = 
+  send[Either[Error, ?], R, Int](???)
+
+val count: Eff[R: Reader[Config, ?] MemberIn ?
+                : Either[Error, ?] MemberIn ?] = for {
+  uri <- getApiEndpoint
+  count <- getCountFromApi(uri)
+} yield count
+#+END_SRC
+-  FreeK
+
+* Monadic in production
+#+BEGIN_NOTES
+除了 Eff 这类 函数库工具外, 在产品中应用 Monadic, 还需要很多其他的帮助
+#+END_NOTES
+
+** FP Library
+- cats
+- scalaz
+
+#+BEGIN_NOTES
+能够提供很多有用的 Monads, Monoids, Functors 等等
+#+END_NOTES
+
+** Monadic framework
+Play, Akka, Unfiltered, Scalatra
 
 ** Other Library
 https://github.com/lauris/awesome-scala
