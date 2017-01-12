@@ -1,0 +1,451 @@
+#+STARTUP: indent
+#+STARTUP: showall
+#+PROPERTY: header-args :results silent
+#+OPTIONS: <:nil timestamp:nil toc:nil num:nil
+
+#+REVEAL_EXTRA_CSS: ./style/main.css
+#+REVEAL_PLUGINS: (notes)
+#+BEGIN_SRC emacs-lisp :exports none
+(require 'ox-reveal)
+(setq org-edit-src-content-indentation 0)
+(setq org-reveal-root "./node_modules/reveal.js")
+(setq org-reveal-hlevel 1)
+(setq org-reveal-title-slide 'auto)
+#+END_SRC
+
+#+TITLE: Monadic in Scala
+#+AUTHOR: 屈鉴铭
+#+timestamp: 
+
+#+BEGIN_NOTES
+平台: 云计算盛行
+语言: 函数式盛行, JS盛行
+架构: 微服务盛行
+
+- 就在前不久, 我们团队使用 Scala 编写了一堆的 Monadic 的服务逻辑, 并将其部署在 AWS lambda 上, 再结合 AWS API GateWay, DynamoDB, 以及 ElasticSearch Service, 完成了一整套 microservice 的发布.
+
+- 所以, 今天想和大家聊一聊 Scala 和 Monadic 编程的事.
+
+- Monadic programming 里有很多的抽象概念, 有很多人花费数月甚至几年来理解和学习这些东西, 所以 _试图在1个小时给大家讲明白说清楚是不太可能的_ . 所以今天的讨论主要涉及 _一些基本概念以及方法论_ , 点到为止. 如果大家对其中某些概念或思想想要深入了解, 也欢迎在这次分享之后和我联系.
+
+- 调查: 多少人使用过 Scala? 对其基本语法有所了解? 在产品中使用过?
+
+介绍一下 Scala ...
+#+END_NOTES
+
+* Scala History
+** Before 2001
+Web Service 兴起 
+#+BEGIN_NOTES
+通常处理的是一种(半)结构化的不可变数据, 而当时对于 Web 服务端的语言来说, 选择是非常有限的.
+#+END_NOTES
+** 2001
+Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Service 的, 集函数式特性与面向对象特性为一体的程序语言
+#+BEGIN_NOTES
+这惹怒了 FP 社区和 OO 社区的程序员, 都声称要讨伐 Martin 以及这么异教语言
+#+END_NOTES
+** 2004
+*Scala* 的 Java 平台和 .Net 平台 1.0 版本先后发布
+** 2006
+*Scala* 2.0 版本问世. 其编译器由 Scala 编写.
+** 2007
+被需求驱动快速发布包含新特性的子版本.
+#+BEGIN_NOTES
+其实是被各种公司和博士生要求.
+#+END_NOTES
+** 2012
+*Scala* 2.10 版本, 支持了隐式转换, 宏与反射.
+** 2014
+*Scala.js* 0.1 版本发布.
+#+BEGIN_NOTES
+09年 NodeJs 问世, 10年 npm 问世, 使得 JS 在接下来的时间直到今天都成为最火的语言.
+与 Node.js 相同的策略, Scala 也期望能够在前后端使用相同的语言去编写
+#+END_NOTES
+
+* Who is using Scala
+
+#+BEGIN_EXPORT HTML
+<table>
+  <tr>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/linkedin.jpeg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/twitter.jpg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+  </tr>
+  <tr>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/netflix.jpg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+    <td style="border:0">
+      <div style="display: block; background:white url(./images/tumblr.jpg) no-repeat center center; background-size:contain; width: 200px; height: 80px;"></div>
+    </td>
+  </tr>
+  <tr>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/sony.jpeg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/apple.jpg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+  </tr>
+</table>
+#+END_EXPORT
+#+BEGIN_NOTES
+06年, twitter就宣布已经将大部分服务代码由 ruby 转为 Scala. 而苹果公司现在也在使用 Scala 的 play 构建服务.
+#+END_NOTES
+
+* Why Should I Learn Scala?
+** Write concise and clear code
+#+BEGIN_SRC scala 
+case class Person(firstName: String, lastName: String)
+#+END_SRC
+
+#+BEGIN_NOTES
+在Java中, 你需要: 
+- 私有成员变量
+- get方法(可能还有set/with方法)
+- 接受一个 ~Object~ 类型参数的 equals 方法, 除了要判断类型是否相同, 还可能需要判断参数及成员 value 为 ~null~ 和不相等的情况
+- 你需要保证属性相同的两个实例的 ~HashCode~ 方法的返回值一定是相同的.
+#+END_NOTES
+
+** Scalable
+Where the name =Scala= came from. 
+#+BEGIN_NOTES
+Scalable + Language
+- Scripting: REPL (Read-eval-print loop) / Worksheet 
+- Enterprise Applications: Native concurrency and parallel calculation support
+#+END_NOTES
+
+** Easy to maintain
+*** 1. Immutable
+Find the lady (three-card monte)
+[[./images/3cardmonte.jpg]]
+
+*** 2. (Relatively) Readable
+Document OR Source Code?
+
+[[./images/ancientChinese.jpg]]
+#+BEGIN_NOTES
+Scala 是一门可读性很强的语言, 你可以定义很多非常表意的函数和变量名称, 包括 Scala 的关键字. 
+同时, 这些函数和变量也可以被重载和隐藏.
+String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强的语言.
+易读性是一个非常主观的维度. 举例子:
+- 学中文的同学去读一些诗歌或文言文, 会觉得简洁易懂. 但让我去读就会觉得晦涩难懂.
+- 再如, 在使用一些开源库的时候, 有时候觉得源代码比文档更易懂.
+而 Scala 的代码通常是以 函数式的风格去实现的, 所以很多人觉得难懂并不是语言难懂, 而是不适应函数式的思考方式.
+知乎上, 有人说起函数式和面向对象的优劣, 一个非常狂妄的回答说: 面向对象解决了不聪明的程序员不能写代码的问题, 这个是函数式永远也无法解决的.
+因此, 当你习惯于用函数式编程的思维去考虑问题时, Scala 的语言描述性强的优势就会很好的体现出来.
+#+END_NOTES
+
+*** 3. Loose coupling
+- FP is loose coupling
+- Easy IoC and dependency injection.
+#+BEGIN_NOTES
+- 函数式语言本身的松耦合特性是非常显著的. 为什么这么说呢? Java 是可以通过 Interface 来进行对象之间的解耦的, 而 Interface 的本质是有 Signature 约束的函数.
+- 使用 Scala 提供的 trait 和 implicit injection 进行进行控制反转和轻量的依赖注入是非常容易的.
+- 有很好的解耦设计模式, 如 interpreter pattern, cake pattern 等. 能够将可变部分从处理流程中提取出来, 以达到解耦的目的.
+#+END_NOTES
+
+** Platform and Libraries support
+- All the advantages of running on JVM (Diagnostic, tools, GC, etc.)
+- All the libraries in JVM ecosystem.
+- Lots of awesome Scala libraries.
+
+** Listen to us
+
+* Less well
+** Steep learning curve
+[[./images/learningcurve.png]]
+#+BEGIN_NOTES
+这个不是完全不好, 甚至是优点. 很多公司都会对外宣称自己的产品使用 Scala 开发, 其目的之一是能够招聘到很多有技术热情并且很聪明的开发人员. Scala 语言本身的学习门槛是很高的, 不能说不会 Scala 就不是聪明的程序员, 但可以说 Scala 用的好的程序员绝对智商不差.
+#+END_NOTES
+
+** Flexible
+- *Flexibility* comes at the price of *Simplicity*.
+- So many *Concepts* & *Features*.
+#+BEGIN_NOTES
+- 逆变, 协变, 泛型约束 等
+- 隐式转换, 宏, 反射 等
+#+END_NOTES
+
+** Conflict with java library
+#+BEGIN_NOTES
+Scala 的代码有自己的一套 convention 及 style, 当使用 java 类库时, 有时需要一些额外代码将类库提供的 java 风格的接口转为 Scala 风格的接口.
+#+END_NOTES
+
+** Worth to know, worth to learn
+You might fall in love with it.
+#+BEGIN_NOTES
+尽管 Scala 有上述缺点, 但是其语言优势还是非常明显的. 所以 ...
+#+END_NOTES
+
+* Monadic Programming
+通过 *Chainable* 的语言风格以 *纯函数* 的形式来描述对数据的处理流程.
+#+BEGIN_NOTES
+- Monadic 是函数式的一种编程思想和设计风格
+- 不是 Scala 独有的，甚至不是静态类型语言所独有的. 比如 js 也有很多 Monadic 的库来辅助实现 js 函数式实现.
+- 其目的是 effect isolation.
+#+END_NOTES
+** What's effect?
+#+BEGIN_NOTES
+不是纯的.
+Effect 是 Side-effect (副作用) 的简称. 表示一个函数或表达式在调用或执行时, 除返回值外, 对其外部 Scope 产生的附加影响.
+#+END_NOTES
+#+BEGIN_SRC scala
+var count = 0;
+val mkEffect = (input1: Int) => {
+  count = count + 1
+  println(s"The current count is $count")
+  val input2 = readLine()
+  input1 + Integer.parseInt(input2)
+}
+#+END_SRC
+
+** 没有 effect 我们还需要 Monadic programming 吗?
+
+* Monad
+** What's *Monad*?
+[[./images/everest.jpg]]
+#+BEGIN_NOTES
+函数式里有很多非常抽象难懂的概念, 比如 Y-combinator, 再比如 monad.
+Monad 是很多程序员心中的珠穆朗玛, 不同的人对其也有不同的理解.
+Monad 本来是范畴论里的一个数学概念, 因为函数式中的很多数据结构都拥有 Monad 所描述的共有特性,
+所以也泛指这些满足特定条件的数据结构及定义在其上的函数.
+#+END_NOTES
+
+** A scary definition:
+Philip Wadler : 
+#+BEGIN_QUOTE
+Monad 是自函子范畴上的一个含幺半群.
+#+END_QUOTE
+#+BEGIN_NOTES
+美国的计算机科学家, 类型论及函数式设计专家 Philip Wadler 说:
+他也是一个把 monad 引入程序语言的人.
+要了解 Monad 必须学范畴轮 ??? (除非你要写函数库)
+#+END_NOTES
+
+** My understanding:
+#+BEGIN_NOTES
+在谈我的理解之前, 需要先给不太清楚 Scala 特性的人熟悉一下两个概念.
+#+END_NOTES
+*** 类型构造器
+Java 里的泛型是一阶类型构造器 (first-order type) :
+#+BEGIN_SRC java
+class List<T> {}
+#+END_SRC
+在 Scala 里这样表示
+#+BEGIN_SRC scala 
+class List[T] {}
+#+END_SRC
+
+在 Scala 里还支持高阶类型构造器
+#+BEGIN_SRC scala
+class List[F[_]] {}
+#+END_SRC
+
+*** trait 特质
+#+BEGIN_SRC scala 
+trait Dev
+class ScalaDev extends Dev
+#+END_SRC
+trait 也可以是高阶的
+#+BEGIN_SRC scala 
+trait Dev[F[_]]
+class ScalaDev[A] extends Dev[ScalaDev]
+val lex = new ScalaDev[Int]
+#+END_SRC
+
+*** Monad: 一类物理特性和逻辑特性相同的数据结构的统称
+
+*** 1. monad 的物理特性
+#+BEGIN_SRC scala 
+trait Monad[F[_]] {
+  def pure[A](a: => A): F[A]                      // point
+  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] // bind
+}
+#+END_SRC
+F 是一个 Monad, 则方法注入后
+#+BEGIN_SRC scala 
+class F[A] {
+  def flatMap[A, B](f: A => F[B]): F[B]
+}
+#+END_SRC
+
+*** 2. monad 的逻辑特性 (Monad laws)
+- Left identity (左同一律)
+#+BEGIN_SRC scala 
+val f: A => F[B] = ???
+val a: A = ???
+Monad[F].pure[A](a).flatMap(f) === f(a)
+#+END_SRC
+
+- Right identity (右同一律)
+#+BEGIN_SRC scala 
+val m: F[A] = ???
+m.flatMap(Monad[F].pure) === m
+#+END_SRC
+
+- Associativity (结合律)
+#+BEGIN_SRC scala
+val m: F[A] = ???
+val f: A => F[B] = ???
+val g: B => F[C] = ???
+m.flatMap(f).flatMap(g) === m.flatMap( a => f(a).flatMap(g) )
+#+END_SRC
+
+* Monad Samples
+** A billion-dollar mistake
+[[./images/tony.jpg]]
+#+BEGIN_NOTES
+- 英国计算机科学家, 图灵奖得住, 算法的快排就是他发明的.
+- 09年, 他在一次计算机会议上向大家道歉, 说他在 1965 年犯了一个十亿美金的错误. 
+- 他发明了 null. 因为这太容易实现了. 结果在今后的几十年里, 无数软件因为 null 导致错误和崩溃, 使各个行业亏损了无数金钱.
+- 我们要小心, 尽量少用或者不用 null, 那么 ...
+#+END_NOTES
+#+ATTR_REVEAL: :frag appear
+用户给出一个类型为 A 的值, 但也有可能什么都不给, 不用 null 该如何表示?
+
+** Option[A]
+#+BEGIN_SRC scala
+trait Option[+A]
+class Some[A](value: A) extends Option[A]
+object None extends Option[Nothing]
+#+END_SRC
+
+考虑有两个值, 
+- 第一个值时, 结果为空
+- 第一个值不为空, 第二个值为空时, 结果为空
+- 第一个和第二个值都不为空时, 结果为两个值的和
+
+** Option 的用法实例
+#+BEGIN_SRC scala 
+val value1: Option[Int] = ???
+val value2: Option[Int] = ???
+
+value1.flatMap { v1 =>
+  value2.flatMap { v2 =>
+    v1 + v2
+  }
+}
+#+END_SRC
+更 scala 的写法是
+#+BEGIN_SRC scala 
+for {
+v1 <- value1
+v2 <- value2
+} yield v1 + v2
+#+END_SRC
+#+BEGIN_NOTES
+Option 能够做到
+- 表征存在与否的上下文
+- 在任意一个计算环节出现问题时, 中断后续计算 
+- 例如 
+  + 典型的分母可能为零的数学计算
+  + 数据可能不存在的处理过程, HashMap 里取值, 避免了异常与处理
+#+END_NOTES
+
+** Either (Disjunction, Xor)
+#+BEGIN_SRC scala
+trait Either[+A, +B]
+class Left[A](value: A) extends Either[A, Nothing]
+class Right[B](value: B) extends Either[Nothing, B]
+#+END_SRC
+#+BEGIN_NOTES
+异或为真, 则A 与 B 只有一个为真.
+Either 这个 monad 有什么用呢?
+#+END_NOTES
+考虑场景, 可能出错的多个有序处理过程,
+- 所有过程不出错, 则完成处理, 并输出结果
+- 任何一个过程出错, 则中断后续处理, 并返回错误
+
+** Either 的用法实例
+#+BEGIN_SRC scala 
+def userInputName: Either[String] = ???
+def findInvoiceFromDatabaseBy(name: String): Either[Invoice] = ???
+def getJsonFromInvoice(invoice: Invoice): Json = ???
+
+val json = userInputName.flatMap { name => 
+  findInvoiceFromDatabaseBy(name) => { invoice =>
+    getJsonFromInvoice(invoice)
+  }
+}
+#+END_SRC
+更 scala 的写法是
+#+BEGIN_SRC scala 
+val json = for {
+  name <- userInputName
+  invoice <- findInvoiceFromDatabaseBy(name)
+  json <- getJsonFromInvoice(invoice)
+} yield json
+#+END_SRC
+
+#+BEGIN_NOTES
+Either 能够做到
+- 表征同时正确或错误两种值
+- 并在任意一个处理环节出现问题时, 中断后续计算
+- 可以在最后对处理过程中可能出现的错误集中进行处理
+#+END_NOTES
+
+** Reader
+#+BEGIN_NOTES
+Scala 原生提供的 monad 除了 Option 和 Either 还有很多, 例如 List, Map, Try, Future 等等.
+除了这些原生的 monad, 还有很多可以通过加载 Scala 各种函数式类库, 如 scalaz, cats等获得.
+比如说最简单的 Reader monad, 
+#+END_NOTES
+
+#+BEGIN_SRC scala
+class Reader[A, B](run: A => B)
+def ask[B]: Reader[B, B] = Reader[B, B](identity[B])
+def pure[A, B](b: B): Reader[A, B] = Reader[A, B](_ => b)
+#+END_SRC
+
+考虑, 我们需要一个从某处获取的配置文件, 并以此为基础做后续处理
+
+** Reader 的用法实例
+#+BEGIN_SRC scala 
+def getApiEndpoint: Reader[Config, URI] = 
+  ask[Config].flatMap(config => pure[Config, URI](config.endpoint))
+def getCountFromApi(uri: URI): Reader[Config, Int] = 
+  pure[Config, Int](syncGet(uri+"/count"))
+
+val count = getApiEndpoint.flatMap { uri =>
+  getCountFromApi(uri)
+}.run(config)
+
+#+END_SRC
+更 scala 的写法是
+#+BEGIN_SRC scala 
+val count = (for {
+  uri <- getApiEndpoint(config)
+  count <- getCountFromApi(uri)
+} yield count).run(config)
+#+END_SRC
+
+#+BEGIN_NOTES
+Reader 能够做到
+- 在没有某种依赖时, 提供这种依赖的能力
+- 将代码片段组 Akka, Unfiltered, Scalatra
+
+** Other Library
+https://github.com/lauris/awesome-scala
+
+** Monadic in Other Languages
+- JS: monet.js, lodash/fp
+- Ruby: monads
+
+* Should we use it?
+#+BEGIN_NOTES
+怎样确定在产品中是否采用某一技术或某一语言?
+除了该技术或语言本身能否满足产品的当前需求及未来的需求变化外, 
+一个重要的评价标准: 一项新的技术, 一门新的语言, 如果你所在的团队里, 所有人在了解交付计划的情况下, 都觉得OK.
+团队成功才是真的成功, 强行推广一项技术或语言, 很容易导致产品失败.
+当然也需要根据团队人员流动速率, 团队技术未来的发展愿景等多方面因素来确定.
+
+但即便无法完全使用 Scala 去写纯函数的软件产品, 通过学习与借鉴 Monadic 思想, 也能够将软件的架构设计的更加合理. 比如欧阳的 Either.
+#+END_NOTES
+
+* Thank you
+
+Bye.

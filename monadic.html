@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Monadic in Scala</title>
+<meta name="author" content="(屈鉴铭)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./node_modules/reveal.js/css/reveal.css"/>
+
+<link rel="stylesheet" href="./node_modules/reveal.js/css/theme/moon.css" id="theme"/>
+
+<link rel="stylesheet" href="./style/main.css"/>
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = './node_modules/reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Monadic in Scala</h1><h2 class="author">屈鉴铭</h2>
+</section>
+<aside class="notes">
+<p>
+平台: 云计算盛行
+语言: 函数式盛行, JS盛行
+架构: 微服务盛行
+</p>
+
+<ul>
+<li>就在前不久, 我们团队使用 Scala 编写了一堆的 Monadic 的服务逻辑, 并将其部署在 AWS lambda 上, 再结合 AWS API GateWay, DynamoDB, 以及 ElasticSearch Service, 完成了一整套 microservice 的发布.</li>
+
+<li>所以, 今天想和大家聊一聊 Scala 和 Monadic 编程的事.</li>
+
+<li>Monadic programming 里有很多的抽象概念, 有很多人花费数月甚至几年来理解和学习这些东西, 所以 <span class="underline">试图在1个小时给大家讲明白说清楚是不太可能的</span> . 所以今天的讨论主要涉及 <span class="underline">一些基本概念以及方法论</span> , 点到为止. 如果大家对其中某些概念或思想想要深入了解, 也欢迎在这次分享之后和我联系.</li>
+
+<li>调查: 多少人使用过 Scala? 对其基本语法有所了解? 在产品中使用过?</li>
+
+</ul>
+
+<p>
+介绍一下 Scala ...
+</p>
+
+</aside>
+
+<section>
+<section id="slide-orgd6c6826">
+<h2 id="orgd6c6826">Scala History</h2>
+<div class="outline-text-2" id="text-orgd6c6826">
+</div></section>
+<section id="slide-org31a5cf8">
+<h3 id="org31a5cf8">Before 2001</h3>
+<p>
+Web Service 兴起 
+</p>
+<aside class="notes">
+<p>
+通常处理的是一种(半)结构化的不可变数据, 而当时对于 Web 服务端的语言来说, 选择是非常有限的.
+</p>
+
+</aside>
+</section>
+<section id="slide-org0f6177a">
+<h3 id="org0f6177a">2001</h3>
+<p>
+Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Service 的, 集函数式特性与面向对象特性为一体的程序语言
+</p>
+<aside class="notes">
+<p>
+这惹怒了 FP 社区和 OO 社区的程序员, 都声称要讨伐 Martin 以及这么异教语言
+</p>
+
+</aside>
+</section>
+<section id="slide-org912bd3b">
+<h3 id="org912bd3b">2004</h3>
+<p>
+<b>Scala</b> 的 Java 平台和 .Net 平台 1.0 版本先后发布
+</p>
+</section>
+<section id="slide-orgedb6272">
+<h3 id="orgedb6272">2006</h3>
+<p>
+<b>Scala</b> 2.0 版本问世. 其编译器由 Scala 编写.
+</p>
+</section>
+<section id="slide-org685ba95">
+<h3 id="org685ba95">2007</h3>
+<p>
+被需求驱动快速发布包含新特性的子版本.
+</p>
+<aside class="notes">
+<p>
+其实是被各种公司和博士生要求.
+</p>
+
+</aside>
+</section>
+<section id="slide-orgee078ef">
+<h3 id="orgee078ef">2012</h3>
+<p>
+<b>Scala</b> 2.10 版本, 支持了隐式转换, 宏与反射.
+</p>
+</section>
+<section id="slide-org73388ea">
+<h3 id="org73388ea">2014</h3>
+<p>
+<b>Scala.js</b> 0.1 版本发布.
+</p>
+<aside class="notes">
+<p>
+09年 NodeJs 问世, 10年 npm 问世, 使得 JS 在接下来的时间直到今天都成为最火的语言.
+与 Node.js 相同的策略, Scala 也期望能够在前后端使用相同的语言去编写
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-orge533d0c">
+<h2 id="orge533d0c">Who is using Scala</h2>
+<table>
+  <tr>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/linkedin.jpeg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/twitter.jpg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+  </tr>
+  <tr>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/netflix.jpg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+    <td style="border:0">
+      <div style="display: block; background:white url(./images/tumblr.jpg) no-repeat center center; background-size:contain; width: 200px; height: 80px;"></div>
+    </td>
+  </tr>
+  <tr>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/sony.jpeg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+    <td style="border:0">
+      <div style="display: block; background:transparent url(./images/apple.jpg) no-repeat center center; background-size:cover; width: 200px; height: 80px;"></div>
+    </td>
+  </tr>
+</table>
+<aside class="notes">
+<p>
+06年, twitter就宣布已经将大部分服务代码由 ruby 转为 Scala. 而苹果公司现在也在使用 Scala 的 play 构建服务.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-org4309e4b">
+<h2 id="org4309e4b">Why Should I Learn Scala?</h2>
+<div class="outline-text-2" id="text-org4309e4b">
+</div></section>
+<section id="slide-orgf2a9a6e">
+<h3 id="orgf2a9a6e">Write concise and clear code</h3>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">case</span> <span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">Person</span>(firstName<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>, lastName<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>)
+</pre>
+</div>
+
+<aside class="notes">
+<p>
+在Java中, 你需要: 
+</p>
+<ul>
+<li>私有成员变量</li>
+<li>get方法(可能还有set/with方法)</li>
+<li>接受一个 <code>Object</code> 类型参数的 equals 方法, 除了要判断类型是否相同, 还可能需要判断参数及成员 value 为 <code>null</code> 和不相等的情况</li>
+<li>你需要保证属性相同的两个实例的 <code>HashCode</code> 方法的返回值一定是相同的.</li>
+
+</ul>
+
+</aside>
+
+</section>
+<section id="slide-org6b9713a">
+<h3 id="org6b9713a">Scalable</h3>
+<p>
+Where the name <code>Scala</code> came from. 
+</p>
+<aside class="notes">
+<p>
+Scalable + Language
+</p>
+<ul>
+<li>Scripting: REPL (Read-eval-print loop) / Worksheet</li>
+<li>Enterprise Applications: Native concurrency and parallel calculation support</li>
+
+</ul>
+
+</aside>
+
+</section>
+<section id="slide-orgbb5b0ab">
+<h3 id="orgbb5b0ab">Easy to maintain</h3>
+<div class="outline-text-3" id="text-orgbb5b0ab">
+</div></section>
+<section id="slide-orgda4b7f4">
+<h4 id="orgda4b7f4">1. Immutable</h4>
+<p>
+Find the lady (three-card monte)
+<img src="./images/3cardmonte.jpg" alt="3cardmonte.jpg" />
+</p>
+
+</section>
+<section id="slide-org68dfa97">
+<h4 id="org68dfa97">2. (Relatively) Readable</h4>
+<p>
+Document OR Source Code?
+</p>
+
+
+<div class="figure">
+<p><img src="./images/ancientChinese.jpg" alt="ancientChinese.jpg" />
+</p>
+</div>
+<aside class="notes">
+<p>
+Scala 是一门可读性很强的语言, 你可以定义很多非常表意的函数和变量名称, 包括 Scala 的关键字. 
+同时, 这些函数和变量也可以被重载和隐藏.
+String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强的语言.
+易读性是一个非常主观的维度. 举例子:
+</p>
+<ul>
+<li>学中文的同学去读一些诗歌或文言文, 会觉得简洁易懂. 但让我去读就会觉得晦涩难懂.</li>
+<li>再如, 在使用一些开源库的时候, 有时候觉得源代码比文档更易懂.</li>
+
+</ul>
+<p>
+而 Scala 的代码通常是以 函数式的风格去实现的, 所以很多人觉得难懂并不是语言难懂, 而是不适应函数式的思考方式.
+知乎上, 有人说起函数式和面向对象的优劣, 一个非常狂妄的回答说: 面向对象解决了不聪明的程序员不能写代码的问题, 这个是函数式永远也无法解决的.
+因此, 当你习惯于用函数式编程的思维去考虑问题时, Scala 的语言描述性强的优势就会很好的体现出来.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-orgeea9db6">
+<h4 id="orgeea9db6">3. Loose coupling</h4>
+<ul>
+<li>FP is loose coupling</li>
+<li>Easy IoC and dependency injection.</li>
+
+</ul>
+<aside class="notes">
+<ul>
+<li>函数式语言本身的松耦合特性是非常显著的. 为什么这么说呢? Java 是可以通过 Interface 来进行对象之间的解耦的, 而 Interface 的本质是有 Signature 约束的函数.</li>
+<li>使用 Scala 提供的 trait 和 implicit injection 进行进行控制反转和轻量的依赖注入是非常容易的.</li>
+<li>有很好的解耦设计模式, 如 interpreter pattern, cake pattern 等. 能够将可变部分从处理流程中提取出来, 以达到解耦的目的.</li>
+
+</ul>
+
+</aside>
+
+</section>
+<section id="slide-orgd22f0aa">
+<h3 id="orgd22f0aa">Platform and Libraries support</h3>
+<ul>
+<li>All the advantages of running on JVM (Diagnostic, tools, GC, etc.)</li>
+<li>All the libraries in JVM ecosystem.</li>
+<li>Lots of awesome Scala libraries.</li>
+
+</ul>
+
+</section>
+<section id="slide-org58fe088">
+<h3 id="org58fe088">Listen to us</h3>
+
+</section>
+</section>
+<section>
+<section id="slide-org2d8e86f">
+<h2 id="org2d8e86f">Less well</h2>
+<div class="outline-text-2" id="text-org2d8e86f">
+</div></section>
+<section id="slide-orgf341ce0">
+<h3 id="orgf341ce0">Steep learning curve</h3>
+
+<div class="figure">
+<p><img src="./images/learningcurve.png" alt="learningcurve.png" />
+</p>
+</div>
+<aside class="notes">
+<p>
+这个不是完全不好, 甚至是优点. 很多公司都会对外宣称自己的产品使用 Scala 开发, 其目的之一是能够招聘到很多有技术热情并且很聪明的开发人员. Scala 语言本身的学习门槛是很高的, 不能说不会 Scala 就不是聪明的程序员, 但可以说 Scala 用的好的程序员绝对智商不差.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org3c750b6">
+<h3 id="org3c750b6">Flexible</h3>
+<ul>
+<li><b>Flexibility</b> comes at the price of <b>Simplicity</b>.</li>
+<li>So many <b>Concepts</b> &amp; <b>Features</b>.</li>
+
+</ul>
+<aside class="notes">
+<ul>
+<li>逆变, 协变, 泛型约束 等</li>
+<li>隐式转换, 宏, 反射 等</li>
+
+</ul>
+
+</aside>
+
+</section>
+<section id="slide-org15c6694">
+<h3 id="org15c6694">Conflict with java library</h3>
+<aside class="notes">
+<p>
+Scala 的代码有自己的一套 convention 及 style, 当使用 java 类库时, 有时需要一些额外代码将类库提供的 java 风格的接口转为 Scala 风格的接口.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org36231cc">
+<h3 id="org36231cc">Worth to know, worth to learn</h3>
+<p>
+You might fall in love with it.
+</p>
+<aside class="notes">
+<p>
+尽管 Scala 有上述缺点, 但是其语言优势还是非常明显的. 所以 ...
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdf57ff5">
+<h2 id="orgdf57ff5">Monadic Programming</h2>
+<p>
+通过 <b>Chainable</b> 的语言风格以 <b>纯函数</b> 的形式来描述对数据的处理流程.
+</p>
+<aside class="notes">
+<ul>
+<li>Monadic 是函数式的一种编程思想和设计风格</li>
+<li>不是 Scala 独有的，甚至不是静态类型语言所独有的. 比如 js 也有很多 Monadic 的库来辅助实现 js 函数式实现.</li>
+<li>其目的是 effect isolation.</li>
+
+</ul>
+
+</aside>
+</section>
+<section id="slide-orgbc0c1e7">
+<h3 id="orgbc0c1e7">What's effect?</h3>
+<aside class="notes">
+<p>
+不是纯的.
+Effect 是 Side-effect (副作用) 的简称. 表示一个函数或表达式在调用或执行时, 除返回值外, 对其外部 Scope 产生的附加影响.
+</p>
+
+</aside>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">var</span> <span style="color: #ff9da4; font-weight: bold;">count</span> <span style="color: #d1f1a9;">=</span> <span style="color: #bbdaff;">0</span>;
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">mkEffect</span> <span style="color: #d1f1a9;">=</span> (input1<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Int</span>) <span style="color: #d1f1a9;">=&gt;</span> {
+  count <span style="color: #d1f1a9;">=</span> count + <span style="color: #bbdaff;">1</span>
+  println(s<span style="color: #99ffff;">"The current count is </span><span style="color: #ffeead;">$count</span><span style="color: #99ffff;">"</span>)
+  <span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">input2</span> <span style="color: #d1f1a9;">=</span> readLine()
+  input1 + <span style="color: #bbdaff;">Integer</span>.parseInt(input2)
+}
+</pre>
+</div>
+
+</section>
+<section id="slide-orgb491650">
+<h3 id="orgb491650">没有 effect 我们还需要 Monadic programming 吗?</h3>
+
+</section>
+</section>
+<section>
+<section id="slide-org93407c2">
+<h2 id="org93407c2">Monad</h2>
+<div class="outline-text-2" id="text-org93407c2">
+</div></section>
+<section id="slide-orgfe2e203">
+<h3 id="orgfe2e203">What's <b>Monad</b>?</h3>
+
+<div class="figure">
+<p><img src="./images/everest.jpg" alt="everest.jpg" />
+</p>
+</div>
+<aside class="notes">
+<p>
+函数式里有很多非常抽象难懂的概念, 比如 Y-combinator, 再比如 monad.
+Monad 是很多程序员心中的珠穆朗玛, 不同的人对其也有不同的理解.
+Monad 本来是范畴论里的一个数学概念, 因为函数式中的很多数据结构都拥有 Monad 所描述的共有特性,
+所以也泛指这些满足特定条件的数据结构及定义在其上的函数.
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org7a2d4cf">
+<h3 id="org7a2d4cf">A scary definition:</h3>
+<p>
+Philip Wadler : 
+</p>
+<blockquote nil>
+<p>
+Monad 是自函子范畴上的一个含幺半群.
+</p>
+</blockquote>
+<aside class="notes">
+<p>
+美国的计算机科学家, 类型论及函数式设计专家 Philip Wadler 说:
+他也是一个把 monad 引入程序语言的人.
+要了解 Monad 必须学范畴轮 ??? (除非你要写函数库)
+</p>
+
+</aside>
+
+</section>
+<section id="slide-org7c034d5">
+<h3 id="org7c034d5">My understanding:</h3>
+<aside class="notes">
+<p>
+在谈我的理解之前, 需要先给不太清楚 Scala 特性的人熟悉一下两个概念.
+</p>
+
+</aside>
+</section>
+<section id="slide-org24b7534">
+<h4 id="org24b7534">类型构造器</h4>
+<p>
+Java 里的泛型是一阶类型构造器 (first-order type) :
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-java"><span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">List</span>&lt;<span style="color: #bbdaff;">T</span>&gt; {}
+</pre>
+</div>
+<p>
+在 Scala 里这样表示
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">List</span>[<span style="color: #bbdaff;">T</span>] {}
+</pre>
+</div>
+
+<p>
+在 Scala 里还支持高阶类型构造器
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">List</span>[<span style="color: #bbdaff;">F</span>[<span style="color: #d1f1a9;">_</span>]] {}
+</pre>
+</div>
+
+</section>
+<section id="slide-org47f4c3b">
+<h4 id="org47f4c3b">trait 特质</h4>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Dev</span>
+<span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">ScalaDev</span> <span style="color: #d1f1a9;">extends</span> <span style="color: #bbdaff;">Dev</span>
+</pre>
+</div>
+<p>
+trait 也可以是高阶的
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Dev</span>[<span style="color: #bbdaff;">F</span>[<span style="color: #d1f1a9;">_</span>]]
+<span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">ScalaDev</span>[<span style="color: #bbdaff;">A</span>] <span style="color: #d1f1a9;">extends</span> <span style="color: #bbdaff;">Dev</span>[<span style="color: #bbdaff;">ScalaDev</span>]
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">lex</span> <span style="color: #d1f1a9;">=</span> <span style="color: #d1f1a9;">new</span> <span style="color: #bbdaff;">ScalaDev</span>[<span style="color: #bbdaff;">Int</span>]
+</pre>
+</div>
+
+</section>
+<section id="slide-org2ecb0fc">
+<h4 id="org2ecb0fc">Monad: 一类物理特性和逻辑特性相同的数据结构的统称</h4>
+
+</section>
+<section id="slide-orgc6693e0">
+<h4 id="orgc6693e0">1. monad 的物理特性</h4>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Monad</span>[<span style="color: #bbdaff;">F</span>[<span style="color: #d1f1a9;">_</span>]] {
+  <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">pure</span>[<span style="color: #bbdaff;">A</span>](a<span style="color: #d1f1a9;">:</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">A</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">A</span>]                      <span style="color: #7285b7; font-style: italic;">// </span><span style="color: #7285b7; font-style: italic;">point</span>
+  <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">flatMap</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](fa<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">A</span>])(f<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>])<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>] <span style="color: #7285b7; font-style: italic;">// </span><span style="color: #7285b7; font-style: italic;">bind</span>
+}
+</pre>
+</div>
+<p>
+F 是一个 Monad, 则方法注入后
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">A</span>] {
+  <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">flatMap</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](f<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>])<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>]
+}
+</pre>
+</div>
+
+</section>
+<section id="slide-org3ecd60c">
+<h4 id="org3ecd60c">2. monad 的逻辑特性 (Monad laws)</h4>
+<ul>
+<li>Left identity (左同一律)</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">f</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> ???
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">a</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=</span> ???
+<span style="color: #bbdaff;">Monad</span>[<span style="color: #bbdaff;">F</span>].pure[<span style="color: #bbdaff;">A</span>](a).flatMap(f) === f(a)
+</pre>
+</div>
+
+<ul>
+<li>Right identity (右同一律)</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">m</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">A</span>] <span style="color: #d1f1a9;">=</span> ???
+m.flatMap(<span style="color: #bbdaff;">Monad</span>[<span style="color: #bbdaff;">F</span>].pure) === m
+</pre>
+</div>
+
+<ul>
+<li>Associativity (结合律)</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">m</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">A</span>] <span style="color: #d1f1a9;">=</span> ???
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">f</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> ???
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">g</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">B</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">C</span>] <span style="color: #d1f1a9;">=</span> ???
+m.flatMap(f).flatMap(g) === m.flatMap( a <span style="color: #d1f1a9;">=&gt;</span> f(a).flatMap(g) )
+</pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org07132dd">
+<h2 id="org07132dd">Monads</h2>
+<div class="outline-text-2" id="text-org07132dd">
+</div></section>
+<section id="slide-org6f85a43">
+<h3 id="org6f85a43">A billion-dollar mistake</h3>
+
+<div class="figure">
+<p><img src="./images/tony.jpg" alt="tony.jpg" />
+</p>
+</div>
+<aside class="notes">
+<ul>
+<li>英国计算机科学家, 图灵奖得住, 算法的快排就是他发明的.</li>
+<li>09年, 他在一次计算机会议上向大家道歉, 说他在 1965 年犯了一个十亿美金的错误.</li>
+<li>他发明了 null. 因为这太容易实现了. 结果在今后的几十年里, 无数软件因为 null 导致错误和崩溃, 使各个行业亏损了无数金钱.</li>
+<li>我们要小心, 尽量少用或者不用 null, 那么 ...</li>
+
+</ul>
+
+</aside>
+<p class="fragment appear">
+用户给出一个类型为 A 的值, 但也有可能什么都不给, 不用 null 该如何表示?
+</p>
+
+</section>
+<section id="slide-org036ef60">
+<h3 id="org036ef60">Option[A]</h3>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Option</span>[+<span style="color: #bbdaff;">A</span>]
+<span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">Some</span>[<span style="color: #bbdaff;">A</span>](value<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span>) <span style="color: #d1f1a9;">extends</span> <span style="color: #bbdaff;">Option</span>[<span style="color: #bbdaff;">A</span>]
+<span style="color: #d1f1a9;">object</span> <span style="color: #bbdaff;">None</span> <span style="color: #d1f1a9;">extends</span> <span style="color: #bbdaff;">Option</span>[<span style="color: #bbdaff;">Nothing</span>]
+</pre>
+</div>
+
+<p>
+考虑有两个值, 
+</p>
+<ul>
+<li>第一个值时, 结果为空</li>
+<li>第一个值不为空, 第二个值为空时, 结果为空</li>
+<li>第一个和第二个值都不为空时, 结果为两个值的和</li>
+
+</ul>
+
+</section>
+<section id="slide-org0b54250">
+<h3 id="org0b54250">Option 的用法实例</h3>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">value1</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Option</span>[<span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> ???
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">value2</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Option</span>[<span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> ???
+
+value1.flatMap { v1 <span style="color: #d1f1a9;">=&gt;</span>
+  value2.flatMap { v2 <span style="color: #d1f1a9;">=&gt;</span>
+    v1 + v2
+  }
+}
+</pre>
+</div>
+<p>
+更 scala 的写法是
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">for</span> {
+v1 <span style="color: #d1f1a9;">&lt;-</span> value1
+v2 <span style="color: #d1f1a9;">&lt;-</span> value2
+} <span style="color: #d1f1a9;">yield</span> v1 + v2
+</pre>
+</div>
+<aside class="notes">
+<p>
+Option 能够做到
+</p>
+<ul>
+<li>表征存在与否的上下文</li>
+<li>在任意一个计算环节出现问题时, 中断后续计算</li>
+<li>例如 
+<ul>
+<li>典型的分母可能为零的数学计算</li>
+<li>数据可能不存在的处理过程, HashMap 里取值, 避免了异常与处理</li>
+
+</ul></li>
+
+</ul>
+
+</aside>
+
+</section>
+<section id="slide-orgd7883ae">
+<h3 id="orgd7883ae">Either (Disjunction, Xor)</h3>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Either</span>[+<span style="color: #bbdaff;">A</span>, +<span style="color: #bbdaff;">B</span>]
+<span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">Left</span>[<span style="color: #bbdaff;">A</span>](value<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span>) <span style="color: #d1f1a9;">extends</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">Nothing</span>]
+<span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">Right</span>[<span style="color: #bbdaff;">B</span>](value<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">B</span>) <span style="color: #d1f1a9;">extends</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Nothing</span>, <span style="color: #bbdaff;">B</span>]
+</pre>
+</div>
+<aside class="notes">
+<p>
+异或为真, 则A 与 B 只有一个为真.
+Either 这个 monad 有什么用呢?
+</p>
+
+</aside>
+<p>
+考虑场景, 可能出错的多个有序处理过程,
+</p>
+<ul>
+<li>所有过程不出错, 则完成处理, 并输出结果</li>
+<li>任何一个过程出错, 则中断后续处理, 并返回错误</li>
+
+</ul>
+
+</section>
+<section id="slide-org71e52e3">
+<h3 id="org71e52e3">Either 的用法实例</h3>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">userInputName</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">String</span>] <span style="color: #d1f1a9;">=</span> ???
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">findInvoiceFromDatabaseBy</span>(name<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Invoice</span>] <span style="color: #d1f1a9;">=</span> ???
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getJsonFromInvoice</span>(invoice<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Invoice</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Json</span> <span style="color: #d1f1a9;">=</span> ???
+
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">json</span> <span style="color: #d1f1a9;">=</span> userInputName.flatMap { name <span style="color: #d1f1a9;">=&gt;</span> 
+  findInvoiceFromDatabaseBy(name) <span style="color: #d1f1a9;">=&gt;</span> { invoice <span style="color: #d1f1a9;">=&gt;</span>
+    getJsonFromInvoice(invoice)
+  }
+}
+</pre>
+</div>
+<p>
+更 scala 的写法是
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">json</span> <span style="color: #d1f1a9;">=</span> <span style="color: #d1f1a9;">for</span> {
+  name <span style="color: #d1f1a9;">&lt;-</span> userInputName
+  invoice <span style="color: #d1f1a9;">&lt;-</span> findInvoiceFromDatabaseBy(name)
+  json <span style="color: #d1f1a9;">&lt;-</span> getJsonFromInvoice(invoice)
+} <span style="color: #d1f1a9;">yield</span> json
+</pre>
+</div>
+
+<aside class="notes">
+<p>
+Either 能够做到
+</p>
+<ul>
+<li>表征同时正确或错误两种值</li>
+<li>并在任意一个处理环节出现问题时, 中断后续计算</li>
+<li>可以在最后对处理过程中可能出现的错误集中进行处理</li>
+
+</ul>
+
+</aside>
+
+</section>
+<section id="slide-org2c67cce">
+<h3 id="org2c67cce">Reader</h3>
+<aside class="notes">
+<p>
+Scala 原生提供的 monad 除了 Option 和 Either 还有很多, 例如 List, Map, Try, Future 等等.
+除了这些原生的 monad, 还有很多可以通过加载 Scala 各种函数式类库, 如 scalaz, cats等获得.
+比如说最简单的 Reader monad, 
+</p>
+
+</aside>
+
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](run<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">B</span>)
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">ask</span>[<span style="color: #bbdaff;">B</span>]<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">B</span>, <span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">B</span>, <span style="color: #bbdaff;">B</span>](identity[<span style="color: #bbdaff;">B</span>])
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">pure</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](b<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">B</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](<span style="color: #d1f1a9;">_</span> <span style="color: #d1f1a9;">=&gt;</span> b)
+</pre>
+</div>
+
+<p>
+考虑, 我们需要一个从某处获取的配置文件, 并以此为基础做后续处理
+</p>
+
+</section>
+<section id="slide-orgf357ef4">
+<h3 id="orgf357ef4">Reader 的用法实例</h3>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">URI</span>] <span style="color: #d1f1a9;">=</span> 
+  ask[<span style="color: #bbdaff;">Config</span>].flatMap(config <span style="color: #d1f1a9;">=&gt;</span> pure[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">URI</span>](config.endpoint))
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getCountFromApi</span>(uri<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">URI</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> 
+  pure[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">Int</span>](syncGet(uri+<span style="color: #99ffff;">"/count"</span>))
+
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">count</span> <span style="color: #d1f1a9;">=</span> getApiEndpoint.flatMap { uri <span style="color: #d1f1a9;">=&gt;</span>
+  getCountFromApi(uri)
+}.run(config)
+</pre>
+</div>
+<p>
+更 scala 的写法是
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">count</span> <span style="color: #d1f1a9;">=</span> (<span style="color: #d1f1a9;">for</span> {
+  uri <span style="color: #d1f1a9;">&lt;-</span> getApiEndpoint(config)
+  count <span style="color: #d1f1a9;">&lt;-</span> getCountFromApi(uri)
+} <span style="color: #d1f1a9;">yield</span> count).run(config)
+</pre>
+</div>
+
+<p>
+#+BEGIN_NOTES
+Reader 能够做到
+</p>
+<ul>
+<li>在没有某种依赖时, 提供这种依赖的能力</li>
+<li>将代码片段组 Akka, Unfiltered, Scalatra</li>
+
+</ul>
+
+</section>
+<section id="slide-orgcaf60b6">
+<h3 id="orgcaf60b6">Other Library</h3>
+<p>
+<a href="https://github.com/lauris/awesome-scala">https://github.com/lauris/awesome-scala</a>
+</p>
+
+</section>
+<section id="slide-org61569cd">
+<h3 id="org61569cd">Monadic in Other Languages</h3>
+<ul>
+<li>JS: monet.js, lodash/fp</li>
+<li>Ruby: monads</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0433a7a">
+<h2 id="org0433a7a">Should we use it?</h2>
+<aside class="notes">
+<p>
+怎样确定在产品中是否采用某一技术或某一语言?
+除了该技术或语言本身能否满足产品的当前需求及未来的需求变化外, 
+一个重要的评价标准: 一项新的技术, 一门新的语言, 如果你所在的团队里, 所有人在了解交付计划的情况下, 都觉得OK.
+团队成功才是真的成功, 强行推广一项技术或语言, 很容易导致产品失败.
+当然也需要根据团队人员流动速率, 团队技术未来的发展愿景等多方面因素来确定.
+</p>
+
+<p>
+但即便无法完全使用 Scala 去写纯函数的软件产品, 通过学习与借鉴 Monadic 思想, 也能够将软件的架构设计的更加合理. 比如欧阳的 Either.
+</p>
+
+</aside>
+
+</section>
+</section>
+<section>
+<section id="slide-orgfdc2084">
+<h2 id="orgfdc2084">Thank you</h2>
+<p>
+Bye.
+</p>
+</section>
+</section>
+</div>
+</div>
+<script src="./node_modules/reveal.js/lib/js/head.min.js"></script>
+<script src="./node_modules/reveal.js/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: './node_modules/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>
