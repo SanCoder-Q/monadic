@@ -17,11 +17,10 @@
 #+AUTHOR: 屈鉴铭
 #+timestamp: 
 
-#+BEGIN_NOTES
-平台: 云计算盛行
-语言: 函数式盛行, JS盛行
-架构: 微服务盛行
 
+
+* Why
+#+BEGIN_NOTES
 - 就在前不久, 我们团队使用 Scala 编写了一堆的 Monadic 的服务逻辑, 并将其部署在 AWS lambda 上, 再结合 AWS API GateWay, DynamoDB, 以及 ElasticSearch Service, 完成了一整套 microservice 的发布.
 
 - 所以, 今天想和大家聊一聊 Scala 和 Monadic 编程的事.
@@ -41,24 +40,24 @@ Web Service 兴起
 #+END_NOTES
 ** 2001
 Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Service 的, 集函数式特性与面向对象特性为一体的程序语言
+** 2004
+*Scala* 的 Java 平台和 .Net 平台 1.0 版本先后发布
 #+BEGIN_NOTES
 这惹怒了 FP 社区和 OO 社区的程序员, 都声称要讨伐 Martin 以及这么异教语言
 #+END_NOTES
-** 2004
-*Scala* 的 Java 平台和 .Net 平台 1.0 版本先后发布
 ** 2006
 *Scala* 2.0 版本问世. 其编译器由 Scala 编写.
 ** 2007
 被需求驱动快速发布包含新特性的子版本.
 #+BEGIN_NOTES
-其实是被各种公司和博士生要求.
+其实是被各种公司和理论研究人员要求.
 #+END_NOTES
 ** 2012
 *Scala* 2.10 版本, 支持了隐式转换, 宏与反射.
 ** 2014
 *Scala.js* 0.1 版本发布.
 #+BEGIN_NOTES
-09年 NodeJs 问世, 10年 npm 问世, 使得 JS 在接下来的时间直到今天都成为最火的语言.
+自从09年 NodeJs 问世, 10年 npm 问世, 使得 JS 在接下来的时间直到今天都成为最火的语言.
 与 Node.js 相同的策略, Scala 也期望能够在前后端使用相同的语言去编写
 #+END_NOTES
 
@@ -113,6 +112,7 @@ case class Person(firstName: String, lastName: String)
 ** Scalable
 Where the name =Scala= came from. 
 #+BEGIN_NOTES
+可伸缩性
 Scalable + Language
 - Scripting: REPL (Read-eval-print loop) / Worksheet 
 - Enterprise Applications: Native concurrency and parallel calculation support
@@ -139,18 +139,11 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 因此, 当你习惯于用函数式编程的思维去考虑问题时, Scala 的语言描述性强的优势就会很好的体现出来.
 #+END_NOTES
 
-*** 3. Loose coupling
-- FP is loose coupling
-- Easy IoC and dependency injection.
-#+BEGIN_NOTES
-- 函数式语言本身的松耦合特性是非常显著的. 为什么这么说呢? Java 是可以通过 Interface 来进行对象之间的解耦的, 而 Interface 的本质是有 Signature 约束的函数.
-- 使用 Scala 提供的 trait 和 implicit injection 进行进行控制反转和轻量的依赖注入是非常容易的.
-- 有很好的解耦设计模式, 如 interpreter pattern, cake pattern 等. 能够将可变部分从处理流程中提取出来, 以达到解耦的目的.
-#+END_NOTES
-
 ** Platform and Libraries support
-- All the advantages of running on JVM (Diagnostic, tools, GC, etc.)
-- All the libraries in JVM ecosystem.
+- All the advantages of running on JVM (Diagnostic, Tools, GC, etc.)
+
+- All the libraries in Java ecosystem.
+
 - Lots of awesome Scala libraries.
 
 ** Listen to us
@@ -163,6 +156,7 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 #+END_NOTES
 
 ** Flexible
+灵活性
 - *Flexibility* comes at the price of *Simplicity*.
 - So many *Concepts* & *Features*.
 #+BEGIN_NOTES
@@ -205,11 +199,10 @@ val mkEffect = (input1: Int) => {
 
 ** 没有 effect 我们还需要 Monadic programming 吗?
 
-* Monad
 ** What's *Monad*?
 [[./images/everest.jpg]]
 #+BEGIN_NOTES
-函数式里有很多非常抽象难懂的概念, 比如 Y-combinator, 再比如 monad.
+函数式里有很多非常抽象难懂的概念, 比如 Y-combinator, Continuation 再比如 monad.
 Monad 是很多程序员心中的珠穆朗玛, 不同的人对其也有不同的理解.
 Monad 本来是范畴论里的一个数学概念, 因为函数式中的很多数据结构都拥有 Monad 所描述的共有特性,
 所以也泛指这些满足特定条件的数据结构及定义在其上的函数.
@@ -218,7 +211,7 @@ Monad 本来是范畴论里的一个数学概念, 因为函数式中的很多数
 ** A scary definition:
 Philip Wadler : 
 #+BEGIN_QUOTE
-Monad 是自函子范畴上的一个含幺半群.
+Monad 是自函子范畴上的一个含幺半群
 #+END_QUOTE
 #+BEGIN_NOTES
 美国的计算机科学家, 类型论及函数式设计专家 Philip Wadler 说:
@@ -226,12 +219,11 @@ Monad 是自函子范畴上的一个含幺半群.
 要了解 Monad 必须学范畴轮 ??? (除非你要写函数库)
 #+END_NOTES
 
-** My understanding:
+** Type Constructor
+Java 里的泛型是一阶类型构造器 (first-order type) :
 #+BEGIN_NOTES
 在谈我的理解之前, 需要先给不太清楚 Scala 特性的人熟悉一下两个概念.
 #+END_NOTES
-*** 类型构造器
-Java 里的泛型是一阶类型构造器 (first-order type) :
 #+BEGIN_SRC java
 class List<T> {}
 #+END_SRC
@@ -245,35 +237,27 @@ class List[T] {}
 class List[F[_]] {}
 #+END_SRC
 
-*** trait 特质
-#+BEGIN_SRC scala 
-trait Dev
-class ScalaDev extends Dev
-#+END_SRC
-trait 也可以是高阶的
-#+BEGIN_SRC scala 
-trait Dev[F[_]]
-class ScalaDev[A] extends Dev[ScalaDev]
-val lex = new ScalaDev[Int]
-#+END_SRC
-
 *** Monad: 一类物理特性和逻辑特性相同的数据结构的统称
 
-*** 1. monad 的物理特性
+*** 1. Monad 的物理特性
 #+BEGIN_SRC scala 
-trait Monad[F[_]] {
+object Monad[F[_]] {
   def pure[A](a: => A): F[A]                      // point
   def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] // bind
 }
 #+END_SRC
-F 是一个 Monad, 则方法注入后
+#+BEGIN_NOTES
+~pure~ 方法可以将一个值包成一个特定类型的 Monad
+而 ~flatMap~ 则可以将两个 Monad 组合起来
+#+END_NOTES
+~F~ 是一个 Monad, 则可以定义成员函数
 #+BEGIN_SRC scala 
 class F[A] {
-  def flatMap[A, B](f: A => F[B]): F[B]
+  def flatMap[A, B](f: A => F[B]): F[B] = Monad[F].flatMap[A, B](this)(f)
 }
 #+END_SRC
 
-*** 2. monad 的逻辑特性 (Monad laws)
+*** 2. Monad 的逻辑特性 (Monad laws)
 - Left identity (左同一律)
 #+BEGIN_SRC scala 
 val f: A => F[B] = ???
@@ -295,6 +279,11 @@ val g: B => F[C] = ???
 m.flatMap(f).flatMap(g) === m.flatMap( a => f(a).flatMap(g) )
 #+END_SRC
 
+#+BEGIN_NOTES
+平日里, 在我们使用各种 Monad 的时候, 其实并不需要去操心代码是否满足这些规则, 他们都是对使用者透明的. 
+我们通过一些真实的 Monad 的例子来说明.
+#+END_NOTES
+
 * Monad Samples
 ** A billion-dollar mistake
 [[./images/tony.jpg]]
@@ -302,7 +291,7 @@ m.flatMap(f).flatMap(g) === m.flatMap( a => f(a).flatMap(g) )
 - 英国计算机科学家, 图灵奖得住, 算法的快排就是他发明的.
 - 09年, 他在一次计算机会议上向大家道歉, 说他在 1965 年犯了一个十亿美金的错误. 
 - 他发明了 null. 因为这太容易实现了. 结果在今后的几十年里, 无数软件因为 null 导致错误和崩溃, 使各个行业亏损了无数金钱.
-- 我们要小心, 尽量少用或者不用 null, 那么 ...
+- 我们要小心, 尽量少用或者不用 null, 那么 问题来了, 不用 null 我们用什么?
 #+END_NOTES
 #+ATTR_REVEAL: :frag appear
 用户给出一个类型为 A 的值, 但也有可能什么都不给, 不用 null 该如何表示?
@@ -310,9 +299,19 @@ m.flatMap(f).flatMap(g) === m.flatMap( a => f(a).flatMap(g) )
 ** Option[A]
 #+BEGIN_SRC scala
 trait Option[+A]
-class Some[A](value: A) extends Option[A]
+case class Some[A](value: A) extends Option[A]
 object None extends Option[Nothing]
 #+END_SRC
+
+#+BEGIN_SRC scala
+def root(i: Int): Option[Int] = ???
+def square(i: Int): Option[Int] = ???
+Some(4).flatMap(root) = root(4) // 左同一律
+Some(4).flatMap(Some.apply) = Some(4) // 右同一律
+Some(4).flatMap(root).flatMap(square) = Some(4).flatMap(four => root(four).flatMap(square)) //结合律
+#+END_SRC
+
+** 怎么用?
 
 考虑有两个值, 
 - 第一个值时, 结果为空
@@ -433,19 +432,35 @@ Reader 能够做到
 ** Free & Interpreter Pattern
 [[./images/free.jpg]]
 #+BEGIN_NOTES
+Free 是 Effect isolation 的典型, 它能够将可变部分从处理流程中提取出来, 由一个或多个解释器来解释.
 玩具 ...
-Effect isolation 的典型, Free Monad 能够将可变部分从处理流程中提取出来, 由一个或多个解释器来解释.
+
+木板是我们的程序, 其中允许某些步骤未定义, 而使用一种标记 (DSL) 来代替, 之后 ...
 #+END_NOTES
 
 ** Free & Interpreter Pattern
 [[./images/free2.jpg]]
+#+BEGIN_NOTES
+在一个集中的地方, 对这些标记进行解释, 最终形成整个处理逻辑.
+Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在一起, 形成一种具有逻辑描述能力的数据结构, 再通过一个解释器递归的进行解释, 直到每个标记都被解释完毕, 再将整个逻辑 eval, 拿到最后的结果.
+#+END_NOTES
 
+** 好处:
+- 处理逻辑的解耦
+#+BEGIN_NOTES
+处理逻辑之间本来就是有数据依赖的, 下文的逻辑会依赖上文的处理结果, Free 可以通过类型约束的方式来分离这种约束, 从而使得可变处理逻辑从稳定逻辑中解耦.
+#+END_NOTES
+- 高可重用
+#+BEGIN_NOTES
+因为解释器是递归解释的, 所以相同的标记可以表示相同的可变代码逻辑, 并可以在处理逻辑中出现多次, 从而达到高可重用的目的.
+时间关系, 有兴趣的朋友可以去阅读一些有关 Free 的文档和资料.
+#+END_NOTES
 
 * Composable Monad
 ** Monad Transformer
 #+BEGIN_NOTES
 生产中, 由于业务逻辑的复杂程度不一, 很多情况下需要使用多个 Monad, 例如 ...
-因此, 需要将这些 Monad 结合在一起使用.
+因此, 需要将这些 Monad 结合在一起使用. 
 #+END_NOTES
 
 #+BEGIN_SRC scala 
@@ -464,6 +479,9 @@ for {
 #+END_SRC
 
 ** EitherT
+#+BEGIN_NOTES
+在 Monad 数量较少的时候 (234个) 可以使用 Monad Transformer
+#+END_NOTES
 #+BEGIN_SRC scala 
 def getApiEndpoint: EitherT[Reader[Config, ?], Error, URI] = ???
 def getCountFromApi(uri: URI): EitherT[Reader[Config, ?], Error, Int] = ???
