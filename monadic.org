@@ -17,9 +17,8 @@
 #+AUTHOR: 屈鉴铭
 #+timestamp: 
 
-
-
 * Why
+
 #+BEGIN_NOTES
 - 就在前不久, 我们团队使用 Scala 编写了一堆的 Monadic 的服务逻辑, 并将其部署在 AWS lambda 上, 再结合 AWS API GateWay, DynamoDB, 以及 ElasticSearch Service, 完成了一整套 microservice 的发布.
 
@@ -156,10 +155,10 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 #+END_NOTES
 
 ** Flexible
-灵活性
 - *Flexibility* comes at the price of *Simplicity*.
 - So many *Concepts* & *Features*.
 #+BEGIN_NOTES
+灵活性
 - 逆变, 协变, 泛型约束 等
 - 隐式转换, 宏, 反射 等
 #+END_NOTES
@@ -253,7 +252,8 @@ object Monad[F[_]] {
 ~F~ 是一个 Monad, 则可以定义成员函数
 #+BEGIN_SRC scala 
 class F[A] {
-  def flatMap[A, B](f: A => F[B]): F[B] = Monad[F].flatMap[A, B](this)(f)
+  def flatMap[A, B](f: A => F[B]): F[B] =
+    Monad[F].flatMap[A, B](this)(f)
 }
 #+END_SRC
 
@@ -276,7 +276,8 @@ m.flatMap(Monad[F].pure) === m
 val m: F[A] = ???
 val f: A => F[B] = ???
 val g: B => F[C] = ???
-m.flatMap(f).flatMap(g) === m.flatMap( a => f(a).flatMap(g) )
+m.flatMap(f).flatMap(g) === 
+  m.flatMap( a => f(a).flatMap(g) )
 #+END_SRC
 
 #+BEGIN_NOTES
@@ -306,9 +307,10 @@ object None extends Option[Nothing]
 #+BEGIN_SRC scala
 def root(i: Int): Option[Int] = ???
 def square(i: Int): Option[Int] = ???
-Some(4).flatMap(root) = root(4) // 左同一律
-Some(4).flatMap(Some.apply) = Some(4) // 右同一律
-Some(4).flatMap(root).flatMap(square) = Some(4).flatMap(four => root(four).flatMap(square)) //结合律
+Some(4).flatMap(root) === root(4) // 左同一律
+Some(4).flatMap(Some.apply) === Some(4) // 右同一律
+Some(4).flatMap(root).flatMap(square) ===  //结合律
+  Some(4).flatMap(four => root(four).flatMap(square))
 #+END_SRC
 
 ** 怎么用?
@@ -364,7 +366,6 @@ Either 这个 monad 有什么用呢?
 def userInputName: Either[String] = ???
 def findInvoiceFromDatabaseBy(name: String): Either[Invoice] = ???
 def getJsonFromInvoice(invoice: Invoice): Json = ???
-
 val json = userInputName.flatMap { name => 
   findInvoiceFromDatabaseBy(name) => { invoice =>
     getJsonFromInvoice(invoice)
@@ -396,50 +397,50 @@ Scala 原生提供的 monad 除了 Option 和 Either 还有很多, 例如 List, 
 
 #+BEGIN_SRC scala
 class Reader[A, B](run: A => B)
-def ask[B]: Reader[B, B] = Reader[B, B](identity[B])
-def pure[A, B](b: B): Reader[A, B] = Reader[A, B](_ => b)
+
+def ask[B]: Reader[B, B] = 
+  Reader[B, B](identity[B])
+
+def pure[A, B](b: B): Reader[A, B] = 
+  Reader[A, B](_ => b)
 #+END_SRC
 
 考虑, 我们需要一个从某处获取的配置文件, 并以此为基础做后续处理
 
 ** Reader 的用法实例
+
 #+BEGIN_SRC scala 
 def getApiEndpoint: Reader[Config, URI] = 
-  ask[Config].flatMap(config => pure[Config, URI](config.endpoint))
+  ask[Config].flatMap(config => 
+    pure[Config, URI](config.endpoint)
+)
 def getCountFromApi(uri: URI): Reader[Config, Int] = 
   pure[Config, Int](syncGet(uri+"/count"))
 
 val count = getApiEndpoint.flatMap { uri =>
   getCountFromApi(uri)
 }.run(config)
-
-#+END_SRC
-更 scala 的写法是
-#+BEGIN_SRC scala 
-val count = (for {
-  uri <- getApiEndpoint(config)
-  count <- getCountFromApi(uri)
-} yield count).run(config)
 #+END_SRC
 
 #+BEGIN_NOTES
 Reader 能够做到
 - 在没有某种依赖时, 提供这种依赖的能力
 - 将代码片段组合的能力
-- 只要在 Reader 内部, 任何地方都可以获得该上下文, 非常适合做 config 的注入.
+- 只要在 Reader 内部, 任何地方都可以获得该上下文, 非常适合做 config 的注入
 #+END_NOTES
 
 ** Free & Interpreter Pattern
 [[./images/free.jpg]]
+
 #+BEGIN_NOTES
 Free 是 Effect isolation 的典型, 它能够将可变部分从处理流程中提取出来, 由一个或多个解释器来解释.
 玩具 ...
-
 木板是我们的程序, 其中允许某些步骤未定义, 而使用一种标记 (DSL) 来代替, 之后 ...
 #+END_NOTES
 
 ** Free & Interpreter Pattern
 [[./images/free2.jpg]]
+
 #+BEGIN_NOTES
 在一个集中的地方, 对这些标记进行解释, 最终形成整个处理逻辑.
 Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在一起, 形成一种具有逻辑描述能力的数据结构, 再通过一个解释器递归的进行解释, 直到每个标记都被解释完毕, 再将整个逻辑 eval, 拿到最后的结果.
@@ -543,5 +544,4 @@ https://github.com/lauris/awesome-scala
 #+END_NOTES
 
 * Thank you
-
 Bye.

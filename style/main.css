@@ -1,4 +1,12 @@
+div.slides {
+    width: 1060px !important;
+}
+
 div.org-src-container {
     background-color: black;
     padding: 5px;
+}
+
+pre.src {
+    font-size: 0.8em;
 }
