@@ -465,8 +465,11 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 #+END_NOTES
 
 #+BEGIN_SRC scala 
-def getApiEndpoint: Reader[Config, Either[Error, URI]] = ???
-def getCountFromApi(uri: URI): Reader[Config, Either[Error, Int]] = ???
+def getApiEndpoint: 
+  Reader[Config, Either[Error, URI]] = ???
+
+def getCountFromApi(uri: URI): 
+  Reader[Config, Either[Error, Int]] = ???
 
 for {
   eitherUri <- getApiEndpoint
@@ -484,8 +487,11 @@ for {
 在 Monad 数量较少的时候 (234个) 可以使用 Monad Transformer
 #+END_NOTES
 #+BEGIN_SRC scala 
-def getApiEndpoint: EitherT[Reader[Config, ?], Error, URI] = ???
-def getCountFromApi(uri: URI): EitherT[Reader[Config, ?], Error, Int] = ???
+def getApiEndpoint: 
+  EitherT[Reader[Config, ?], Error, URI] = ???
+
+def getCountFromApi(uri: URI): 
+  EitherT[Reader[Config, ?], Error, Int] = ???
 
 for {
   uri <- getApiEndpoint
@@ -496,9 +502,12 @@ for {
 ** What about more?
 - Eff
 #+BEGIN_SRC scala 
-def getApiEndpoint[R : Reader[Config, ?] MemberIn ?]: Eff[R, URI] = 
+def getApiEndpoint[
+  R : Reader[Config, ?] MemberIn ?]: Eff[R, URI] = 
   send[Reader[Config, ?], R, URI](???)
-def getCountFromApi[R : Either[Error, ?] MemberIn ?](uri: URI): Eff[R, Int] = 
+
+def getCountFromApi[
+  R : Either[Error, ?] MemberIn ?](uri: URI): Eff[R, Int] = 
   send[Either[Error, ?], R, Int](???)
 
 val count: Eff[R: Reader[Config, ?] MemberIn ?

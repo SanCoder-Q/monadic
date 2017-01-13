@@ -8,5 +8,6 @@ div.org-src-container {
 }
 
 pre.src {
+    margin: 8px auto;
     font-size: 0.8em;
 }

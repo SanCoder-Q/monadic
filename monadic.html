@@ -30,11 +30,9 @@
 <section id="sec-title-slide"><h1 class="title">Monadic in Scala</h1><h2 class="author">屈鉴铭</h2>
 </section>
 
-
-
 <section>
-<section id="slide-org855a53c">
-<h2 id="org855a53c">Why</h2>
+<section id="slide-org9ba432a">
+<h2 id="org9ba432a">Why</h2>
 <aside class="notes">
 <ul>
 <li>就在前不久, 我们团队使用 Scala 编写了一堆的 Monadic 的服务逻辑, 并将其部署在 AWS lambda 上, 再结合 AWS API GateWay, DynamoDB, 以及 ElasticSearch Service, 完成了一整套 microservice 的发布.</li>
@@ -56,12 +54,12 @@
 </section>
 </section>
 <section>
-<section id="slide-orgd104da0">
-<h2 id="orgd104da0">Scala History</h2>
-<div class="outline-text-2" id="text-orgd104da0">
+<section id="slide-org4dd3126">
+<h2 id="org4dd3126">Scala History</h2>
+<div class="outline-text-2" id="text-org4dd3126">
 </div></section>
-<section id="slide-orgaf1c0c3">
-<h3 id="orgaf1c0c3">Before 2001</h3>
+<section id="slide-orga2a6b7f">
+<h3 id="orga2a6b7f">Before 2001</h3>
 <p>
 Web Service 兴起 
 </p>
@@ -72,14 +70,14 @@ Web Service 兴起
 
 </aside>
 </section>
-<section id="slide-orge601124">
-<h3 id="orge601124">2001</h3>
+<section id="slide-org43dfccc">
+<h3 id="org43dfccc">2001</h3>
 <p>
 Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Service 的, 集函数式特性与面向对象特性为一体的程序语言
 </p>
 </section>
-<section id="slide-orgb8f660c">
-<h3 id="orgb8f660c">2004</h3>
+<section id="slide-orgccd4bbe">
+<h3 id="orgccd4bbe">2004</h3>
 <p>
 <b>Scala</b> 的 Java 平台和 .Net 平台 1.0 版本先后发布
 </p>
@@ -90,14 +88,14 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 
 </aside>
 </section>
-<section id="slide-orgfccf56d">
-<h3 id="orgfccf56d">2006</h3>
+<section id="slide-orgb493498">
+<h3 id="orgb493498">2006</h3>
 <p>
 <b>Scala</b> 2.0 版本问世. 其编译器由 Scala 编写.
 </p>
 </section>
-<section id="slide-orgfd348e5">
-<h3 id="orgfd348e5">2007</h3>
+<section id="slide-orgeb86678">
+<h3 id="orgeb86678">2007</h3>
 <p>
 被需求驱动快速发布包含新特性的子版本.
 </p>
@@ -108,14 +106,14 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 
 </aside>
 </section>
-<section id="slide-org74b012c">
-<h3 id="org74b012c">2012</h3>
+<section id="slide-orga004ef2">
+<h3 id="orga004ef2">2012</h3>
 <p>
 <b>Scala</b> 2.10 版本, 支持了隐式转换, 宏与反射.
 </p>
 </section>
-<section id="slide-orgce4dbee">
-<h3 id="orgce4dbee">2014</h3>
+<section id="slide-org7e897a5">
+<h3 id="org7e897a5">2014</h3>
 <p>
 <b>Scala.js</b> 0.1 版本发布.
 </p>
@@ -130,8 +128,8 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 </section>
 </section>
 <section>
-<section id="slide-org9fdd07b">
-<h2 id="org9fdd07b">Who is using Scala</h2>
+<section id="slide-orgd2d7b26">
+<h2 id="orgd2d7b26">Who is using Scala</h2>
 <table>
   <tr>
     <td style="border:0">
@@ -168,12 +166,12 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 </section>
 </section>
 <section>
-<section id="slide-orgeccdeb0">
-<h2 id="orgeccdeb0">Why Should I Learn Scala?</h2>
-<div class="outline-text-2" id="text-orgeccdeb0">
+<section id="slide-orgbb75466">
+<h2 id="orgbb75466">Why Should I Learn Scala?</h2>
+<div class="outline-text-2" id="text-orgbb75466">
 </div></section>
-<section id="slide-org5c4589c">
-<h3 id="org5c4589c">Write concise and clear code</h3>
+<section id="slide-orgef5dbcf">
+<h3 id="orgef5dbcf">Write concise and clear code</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">case</span> <span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">Person</span>(firstName<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>, lastName<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>)
@@ -195,8 +193,8 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 </aside>
 
 </section>
-<section id="slide-org7033609">
-<h3 id="org7033609">Scalable</h3>
+<section id="slide-orga80a1c9">
+<h3 id="orga80a1c9">Scalable</h3>
 <p>
 Where the name <code>Scala</code> came from. 
 </p>
@@ -214,20 +212,20 @@ Scalable + Language
 </aside>
 
 </section>
-<section id="slide-org5cf3520">
-<h3 id="org5cf3520">Easy to maintain</h3>
-<div class="outline-text-3" id="text-org5cf3520">
+<section id="slide-org4ec2229">
+<h3 id="org4ec2229">Easy to maintain</h3>
+<div class="outline-text-3" id="text-org4ec2229">
 </div></section>
-<section id="slide-org8aaad0f">
-<h4 id="org8aaad0f">1. Immutable</h4>
+<section id="slide-org0dc91bc">
+<h4 id="org0dc91bc">1. Immutable</h4>
 <p>
 Find the lady (three-card monte)
 <img src="./images/3cardmonte.jpg" alt="3cardmonte.jpg" />
 </p>
 
 </section>
-<section id="slide-org48eeca1">
-<h4 id="org48eeca1">2. (Relatively) Readable</h4>
+<section id="slide-org75b04f9">
+<h4 id="org75b04f9">2. (Relatively) Readable</h4>
 <p>
 Document OR Source Code?
 </p>
@@ -258,8 +256,8 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 </aside>
 
 </section>
-<section id="slide-orgfddfcd8">
-<h3 id="orgfddfcd8">Platform and Libraries support</h3>
+<section id="slide-orgbab6bfd">
+<h3 id="orgbab6bfd">Platform and Libraries support</h3>
 <ul>
 <li>All the advantages of running on JVM (Diagnostic, Tools, GC, etc.)</li>
 
@@ -270,18 +268,18 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 </ul>
 
 </section>
-<section id="slide-org01ca4eb">
-<h3 id="org01ca4eb">Listen to us</h3>
+<section id="slide-orgb808493">
+<h3 id="orgb808493">Listen to us</h3>
 
 </section>
 </section>
 <section>
-<section id="slide-org2dbb33a">
-<h2 id="org2dbb33a">Less well</h2>
-<div class="outline-text-2" id="text-org2dbb33a">
+<section id="slide-orgfd85475">
+<h2 id="orgfd85475">Less well</h2>
+<div class="outline-text-2" id="text-orgfd85475">
 </div></section>
-<section id="slide-org9c14d6b">
-<h3 id="org9c14d6b">Steep learning curve</h3>
+<section id="slide-org94733d4">
+<h3 id="org94733d4">Steep learning curve</h3>
 
 <div class="figure">
 <p><img src="./images/learningcurve.png" alt="learningcurve.png" />
@@ -295,17 +293,17 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 </aside>
 
 </section>
-<section id="slide-org0bc5ced">
-<h3 id="org0bc5ced">Flexible</h3>
-<p>
-灵活性
-</p>
+<section id="slide-org8ff49e9">
+<h3 id="org8ff49e9">Flexible</h3>
 <ul>
 <li><b>Flexibility</b> comes at the price of <b>Simplicity</b>.</li>
 <li>So many <b>Concepts</b> &amp; <b>Features</b>.</li>
 
 </ul>
 <aside class="notes">
+<p>
+灵活性
+</p>
 <ul>
 <li>逆变, 协变, 泛型约束 等</li>
 <li>隐式转换, 宏, 反射 等</li>
@@ -315,8 +313,8 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 </aside>
 
 </section>
-<section id="slide-org04d0991">
-<h3 id="org04d0991">Conflict with java library</h3>
+<section id="slide-org88e7fc4">
+<h3 id="org88e7fc4">Conflict with java library</h3>
 <aside class="notes">
 <p>
 Scala 的代码有自己的一套 convention 及 style, 当使用 java 类库时, 有时需要一些额外代码将类库提供的 java 风格的接口转为 Scala 风格的接口.
@@ -325,8 +323,8 @@ Scala 的代码有自己的一套 convention 及 style, 当使用 java 类库时
 </aside>
 
 </section>
-<section id="slide-orgbbbb99b">
-<h3 id="orgbbbb99b">Worth to know, worth to learn</h3>
+<section id="slide-org3cdce3a">
+<h3 id="org3cdce3a">Worth to know, worth to learn</h3>
 <p>
 You might fall in love with it.
 </p>
@@ -340,8 +338,8 @@ You might fall in love with it.
 </section>
 </section>
 <section>
-<section id="slide-orgc1efedf">
-<h2 id="orgc1efedf">Monadic Programming</h2>
+<section id="slide-orgf5cbd0b">
+<h2 id="orgf5cbd0b">Monadic Programming</h2>
 <p>
 通过 <b>Chainable</b> 的语言风格以 <b>纯函数</b> 的形式来描述对数据的处理流程.
 </p>
@@ -355,8 +353,8 @@ You might fall in love with it.
 
 </aside>
 </section>
-<section id="slide-org499c200">
-<h3 id="org499c200">What's effect?</h3>
+<section id="slide-org9f7d56b">
+<h3 id="org9f7d56b">What's effect?</h3>
 <aside class="notes">
 <p>
 不是纯的.
@@ -377,12 +375,12 @@ Effect 是 Side-effect (副作用) 的简称. 表示一个函数或表达式在�
 </div>
 
 </section>
-<section id="slide-org68e7699">
-<h3 id="org68e7699">没有 effect 我们还需要 Monadic programming 吗?</h3>
+<section id="slide-org46a01f2">
+<h3 id="org46a01f2">没有 effect 我们还需要 Monadic programming 吗?</h3>
 
 </section>
-<section id="slide-org7245587">
-<h3 id="org7245587">What's <b>Monad</b>?</h3>
+<section id="slide-org0571907">
+<h3 id="org0571907">What's <b>Monad</b>?</h3>
 
 <div class="figure">
 <p><img src="./images/everest.jpg" alt="everest.jpg" />
@@ -399,8 +397,8 @@ Monad 本来是范畴论里的一个数学概念, 因为函数式中的很多数
 </aside>
 
 </section>
-<section id="slide-orgd4cf6d1">
-<h3 id="orgd4cf6d1">A scary definition:</h3>
+<section id="slide-org54d459f">
+<h3 id="org54d459f">A scary definition:</h3>
 <p>
 Philip Wadler : 
 </p>
@@ -419,8 +417,8 @@ Monad 是自函子范畴上的一个含幺半群
 </aside>
 
 </section>
-<section id="slide-orgcd367ef">
-<h3 id="orgcd367ef">Type Constructor</h3>
+<section id="slide-orga6e4e0a">
+<h3 id="orga6e4e0a">Type Constructor</h3>
 <p>
 Java 里的泛型是一阶类型构造器 (first-order type) :
 </p>
@@ -454,12 +452,12 @@ Java 里的泛型是一阶类型构造器 (first-order type) :
 </div>
 
 </section>
-<section id="slide-orgf291467">
-<h4 id="orgf291467">Monad: 一类物理特性和逻辑特性相同的数据结构的统称</h4>
+<section id="slide-org32e9497">
+<h4 id="org32e9497">Monad: 一类物理特性和逻辑特性相同的数据结构的统称</h4>
 
 </section>
-<section id="slide-org5e9ef79">
-<h4 id="org5e9ef79">1. Monad 的物理特性</h4>
+<section id="slide-org2ede835">
+<h4 id="org2ede835">1. Monad 的物理特性</h4>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">object</span> <span style="color: #bbdaff;">Monad</span>[<span style="color: #bbdaff;">F</span>[<span style="color: #d1f1a9;">_</span>]] {
@@ -481,14 +479,15 @@ Java 里的泛型是一阶类型构造器 (first-order type) :
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">A</span>] {
-  <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">flatMap</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](f<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>])<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> <span style="color: #bbdaff;">Monad</span>[<span style="color: #bbdaff;">F</span>].flatMap[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](<span style="color: #d1f1a9;">this</span>)(f)
+  <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">flatMap</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](f<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>])<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span>
+    <span style="color: #bbdaff;">Monad</span>[<span style="color: #bbdaff;">F</span>].flatMap[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](<span style="color: #d1f1a9;">this</span>)(f)
 }
 </pre>
 </div>
 
 </section>
-<section id="slide-orgd4d4518">
-<h4 id="orgd4d4518">2. Monad 的逻辑特性 (Monad laws)</h4>
+<section id="slide-orgdd6d29b">
+<h4 id="orgdd6d29b">2. Monad 的逻辑特性 (Monad laws)</h4>
 <ul>
 <li>Left identity (左同一律)</li>
 
@@ -521,7 +520,8 @@ m.flatMap(<span style="color: #bbdaff;">Monad</span>[<span style="color: #bbdaff
 <pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">m</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">A</span>] <span style="color: #d1f1a9;">=</span> ???
 <span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">f</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> ???
 <span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">g</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">B</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">F</span>[<span style="color: #bbdaff;">C</span>] <span style="color: #d1f1a9;">=</span> ???
-m.flatMap(f).flatMap(g) === m.flatMap( a <span style="color: #d1f1a9;">=&gt;</span> f(a).flatMap(g) )
+m.flatMap(f).flatMap(g) === 
+  m.flatMap( a <span style="color: #d1f1a9;">=&gt;</span> f(a).flatMap(g) )
 </pre>
 </div>
 
@@ -536,12 +536,12 @@ m.flatMap(f).flatMap(g) === m.flatMap( a <span style="color: #d1f1a9;">=&gt;</sp
 </section>
 </section>
 <section>
-<section id="slide-orgca8014b">
-<h2 id="orgca8014b">Monad Samples</h2>
-<div class="outline-text-2" id="text-orgca8014b">
+<section id="slide-orge018839">
+<h2 id="orge018839">Monad Samples</h2>
+<div class="outline-text-2" id="text-orge018839">
 </div></section>
-<section id="slide-org8071add">
-<h3 id="org8071add">A billion-dollar mistake</h3>
+<section id="slide-org0aa5867">
+<h3 id="org0aa5867">A billion-dollar mistake</h3>
 
 <div class="figure">
 <p><img src="./images/tony.jpg" alt="tony.jpg" />
@@ -562,8 +562,8 @@ m.flatMap(f).flatMap(g) === m.flatMap( a <span style="color: #d1f1a9;">=&gt;</sp
 </p>
 
 </section>
-<section id="slide-org7a9cbef">
-<h3 id="org7a9cbef">Option[A]</h3>
+<section id="slide-orgf3007b1">
+<h3 id="orgf3007b1">Option[A]</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Option</span>[+<span style="color: #bbdaff;">A</span>]
@@ -578,14 +578,14 @@ m.flatMap(f).flatMap(g) === m.flatMap( a <span style="color: #d1f1a9;">=&gt;</sp
 <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">square</span>(i<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Int</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Option</span>[<span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> ???
 <span style="color: #bbdaff;">Some</span>(<span style="color: #bbdaff;">4</span>).flatMap(root) === root(<span style="color: #bbdaff;">4</span>) <span style="color: #7285b7; font-style: italic;">// </span><span style="color: #7285b7; font-style: italic;">&#24038;&#21516;&#19968;&#24459;</span>
 <span style="color: #bbdaff;">Some</span>(<span style="color: #bbdaff;">4</span>).flatMap(<span style="color: #bbdaff;">Some</span>.apply) === <span style="color: #bbdaff;">Some</span>(<span style="color: #bbdaff;">4</span>) <span style="color: #7285b7; font-style: italic;">// </span><span style="color: #7285b7; font-style: italic;">&#21491;&#21516;&#19968;&#24459;</span>
-<span style="color: #bbdaff;">Some</span>(<span style="color: #bbdaff;">4</span>).flatMap(root).flatMap(square) ===
-  <span style="color: #bbdaff;">Some</span>(<span style="color: #bbdaff;">4</span>).flatMap(four <span style="color: #d1f1a9;">=&gt;</span> root(four).flatMap(square)) <span style="color: #7285b7; font-style: italic;">//</span><span style="color: #7285b7; font-style: italic;">&#32467;&#21512;&#24459;</span>
+<span style="color: #bbdaff;">Some</span>(<span style="color: #bbdaff;">4</span>).flatMap(root).flatMap(square) ===  <span style="color: #7285b7; font-style: italic;">//</span><span style="color: #7285b7; font-style: italic;">&#32467;&#21512;&#24459;</span>
+  <span style="color: #bbdaff;">Some</span>(<span style="color: #bbdaff;">4</span>).flatMap(four <span style="color: #d1f1a9;">=&gt;</span> root(four).flatMap(square))
 </pre>
 </div>
 
 </section>
-<section id="slide-orgf23b4c8">
-<h3 id="orgf23b4c8">怎么用?</h3>
+<section id="slide-org904ba7e">
+<h3 id="org904ba7e">怎么用?</h3>
 <p>
 考虑有两个值, 
 </p>
@@ -597,8 +597,8 @@ m.flatMap(f).flatMap(g) === m.flatMap( a <span style="color: #d1f1a9;">=&gt;</sp
 </ul>
 
 </section>
-<section id="slide-org6f9402d">
-<h3 id="org6f9402d">Option 的用法实例</h3>
+<section id="slide-org826e834">
+<h3 id="org826e834">Option 的用法实例</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">value1</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Option</span>[<span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> ???
@@ -641,8 +641,8 @@ Option 能够做到
 </aside>
 
 </section>
-<section id="slide-org99138f7">
-<h3 id="org99138f7">Either (Disjunction, Xor)</h3>
+<section id="slide-org415f24c">
+<h3 id="org415f24c">Either (Disjunction, Xor)</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Either</span>[+<span style="color: #bbdaff;">A</span>, +<span style="color: #bbdaff;">B</span>]
@@ -667,14 +667,13 @@ Either 这个 monad 有什么用呢?
 </ul>
 
 </section>
-<section id="slide-org565fc5b">
-<h3 id="org565fc5b">Either 的用法实例</h3>
+<section id="slide-orge01554c">
+<h3 id="orge01554c">Either 的用法实例</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">userInputName</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">String</span>] <span style="color: #d1f1a9;">=</span> ???
 <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">findInvoiceFromDatabaseBy</span>(name<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Invoice</span>] <span style="color: #d1f1a9;">=</span> ???
 <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getJsonFromInvoice</span>(invoice<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Invoice</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Json</span> <span style="color: #d1f1a9;">=</span> ???
-
 <span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">json</span> <span style="color: #d1f1a9;">=</span> userInputName.flatMap { name <span style="color: #d1f1a9;">=&gt;</span> 
   findInvoiceFromDatabaseBy(name) <span style="color: #d1f1a9;">=&gt;</span> { invoice <span style="color: #d1f1a9;">=&gt;</span>
     getJsonFromInvoice(invoice)
@@ -709,8 +708,8 @@ Either 能够做到
 </aside>
 
 </section>
-<section id="slide-org37427a8">
-<h3 id="org37427a8">Reader</h3>
+<section id="slide-org8584b45">
+<h3 id="org8584b45">Reader</h3>
 <aside class="notes">
 <p>
 Scala 原生提供的 monad 除了 Option 和 Either 还有很多, 例如 List, Map, Try, Future 等等.
@@ -723,8 +722,12 @@ Scala 原生提供的 monad 除了 Option 和 Either 还有很多, 例如 List, 
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](run<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">A</span> <span style="color: #d1f1a9;">=&gt;</span> <span style="color: #bbdaff;">B</span>)
-<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">ask</span>[<span style="color: #bbdaff;">B</span>]<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">B</span>, <span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">B</span>, <span style="color: #bbdaff;">B</span>](identity[<span style="color: #bbdaff;">B</span>])
-<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">pure</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](b<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">B</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](<span style="color: #d1f1a9;">_</span> <span style="color: #d1f1a9;">=&gt;</span> b)
+
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">ask</span>[<span style="color: #bbdaff;">B</span>]<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">B</span>, <span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> 
+  <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">B</span>, <span style="color: #bbdaff;">B</span>](identity[<span style="color: #bbdaff;">B</span>])
+
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">pure</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](b<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">B</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>] <span style="color: #d1f1a9;">=</span> 
+  <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">A</span>, <span style="color: #bbdaff;">B</span>](<span style="color: #d1f1a9;">_</span> <span style="color: #d1f1a9;">=&gt;</span> b)
 </pre>
 </div>
 
@@ -733,29 +736,20 @@ Scala 原生提供的 monad 除了 Option 和 Either 还有很多, 例如 List, 
 </p>
 
 </section>
-<section id="slide-org03c2023">
-<h3 id="org03c2023">Reader 的用法实例</h3>
+<section id="slide-orgd289bd9">
+<h3 id="orgd289bd9">Reader 的用法实例</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">URI</span>] <span style="color: #d1f1a9;">=</span> 
-  ask[<span style="color: #bbdaff;">Config</span>].flatMap(config <span style="color: #d1f1a9;">=&gt;</span> pure[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">URI</span>](config.endpoint))
+  ask[<span style="color: #bbdaff;">Config</span>].flatMap(config <span style="color: #d1f1a9;">=&gt;</span> 
+    pure[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">URI</span>](config.endpoint)
+)
 <span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getCountFromApi</span>(uri<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">URI</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> 
   pure[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">Int</span>](syncGet(uri+<span style="color: #99ffff;">"/count"</span>))
 
 <span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">count</span> <span style="color: #d1f1a9;">=</span> getApiEndpoint.flatMap { uri <span style="color: #d1f1a9;">=&gt;</span>
   getCountFromApi(uri)
 }.run(config)
-</pre>
-</div>
-<p>
-更 scala 的写法是
-</p>
-<div class="org-src-container">
-
-<pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">count</span> <span style="color: #d1f1a9;">=</span> (<span style="color: #d1f1a9;">for</span> {
-  uri <span style="color: #d1f1a9;">&lt;-</span> getApiEndpoint(config)
-  count <span style="color: #d1f1a9;">&lt;-</span> getCountFromApi(uri)
-} <span style="color: #d1f1a9;">yield</span> count).run(config)
 </pre>
 </div>
 
@@ -766,40 +760,39 @@ Reader 能够做到
 <ul>
 <li>在没有某种依赖时, 提供这种依赖的能力</li>
 <li>将代码片段组合的能力</li>
-<li>只要在 Reader 内部, 任何地方都可以获得该上下文, 非常适合做 config 的注入.</li>
+<li>只要在 Reader 内部, 任何地方都可以获得该上下文, 非常适合做 config 的注入</li>
 
 </ul>
 
 </aside>
 
 </section>
-<section id="slide-org55890d0">
-<h3 id="org55890d0">Free &amp; Interpreter Pattern</h3>
+<section id="slide-orgcdd82bd">
+<h3 id="orgcdd82bd">Free &amp; Interpreter Pattern</h3>
 
 <div class="figure">
 <p><img src="./images/free.jpg" alt="free.jpg" />
 </p>
 </div>
+
 <aside class="notes">
 <p>
 Free 是 Effect isolation 的典型, 它能够将可变部分从处理流程中提取出来, 由一个或多个解释器来解释.
 玩具 ...
-</p>
-
-<p>
 木板是我们的程序, 其中允许某些步骤未定义, 而使用一种标记 (DSL) 来代替, 之后 ...
 </p>
 
 </aside>
 
 </section>
-<section id="slide-org3dfd237">
-<h3 id="org3dfd237">Free &amp; Interpreter Pattern</h3>
+<section id="slide-org5b07325">
+<h3 id="org5b07325">Free &amp; Interpreter Pattern</h3>
 
 <div class="figure">
 <p><img src="./images/free2.jpg" alt="free2.jpg" />
 </p>
 </div>
+
 <aside class="notes">
 <p>
 在一个集中的地方, 对这些标记进行解释, 最终形成整个处理逻辑.
@@ -809,8 +802,8 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </aside>
 
 </section>
-<section id="slide-org542d174">
-<h3 id="org542d174">好处:</h3>
+<section id="slide-org7053804">
+<h3 id="org7053804">好处:</h3>
 <ul>
 <li>处理逻辑的解耦</li>
 
@@ -836,12 +829,12 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </section>
 </section>
 <section>
-<section id="slide-orgdaaf238">
-<h2 id="orgdaaf238">Composable Monad</h2>
-<div class="outline-text-2" id="text-orgdaaf238">
+<section id="slide-org45a30ef">
+<h2 id="org45a30ef">Composable Monad</h2>
+<div class="outline-text-2" id="text-org45a30ef">
 </div></section>
-<section id="slide-orgc0c16af">
-<h3 id="orgc0c16af">Monad Transformer</h3>
+<section id="slide-org8020869">
+<h3 id="org8020869">Monad Transformer</h3>
 <aside class="notes">
 <p>
 生产中, 由于业务逻辑的复杂程度不一, 很多情况下需要使用多个 Monad, 例如 ...
@@ -852,8 +845,11 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 
 <div class="org-src-container">
 
-<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">URI</span>]] <span style="color: #d1f1a9;">=</span> ???
-<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getCountFromApi</span>(uri<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">URI</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">Int</span>]] <span style="color: #d1f1a9;">=</span> ???
+<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span><span style="color: #d1f1a9;">:</span> 
+  <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">URI</span>]] <span style="color: #d1f1a9;">=</span> ???
+
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getCountFromApi</span>(uri<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">URI</span>)<span style="color: #d1f1a9;">:</span> 
+  <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">Int</span>]] <span style="color: #d1f1a9;">=</span> ???
 
 <span style="color: #d1f1a9;">for</span> {
   eitherUri <span style="color: #d1f1a9;">&lt;-</span> getApiEndpoint
@@ -868,8 +864,8 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </div>
 
 </section>
-<section id="slide-orgf3759ae">
-<h3 id="orgf3759ae">EitherT</h3>
+<section id="slide-org68dba1a">
+<h3 id="org68dba1a">EitherT</h3>
 <aside class="notes">
 <p>
 在 Monad 数量较少的时候 (234个) 可以使用 Monad Transformer
@@ -878,8 +874,11 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </aside>
 <div class="org-src-container">
 
-<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">EitherT</span>[<span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, ?], <span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">URI</span>] <span style="color: #d1f1a9;">=</span> ???
-<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getCountFromApi</span>(uri<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">URI</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">EitherT</span>[<span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, ?], <span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> ???
+<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span><span style="color: #d1f1a9;">:</span> 
+  <span style="color: #bbdaff;">EitherT</span>[<span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, ?], <span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">URI</span>] <span style="color: #d1f1a9;">=</span> ???
+
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getCountFromApi</span>(uri<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">URI</span>)<span style="color: #d1f1a9;">:</span> 
+  <span style="color: #bbdaff;">EitherT</span>[<span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, ?], <span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> ???
 
 <span style="color: #d1f1a9;">for</span> {
   uri <span style="color: #d1f1a9;">&lt;-</span> getApiEndpoint
@@ -889,17 +888,20 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </div>
 
 </section>
-<section id="slide-org64f4b8f">
-<h3 id="org64f4b8f">What about more?</h3>
+<section id="slide-orgf509466">
+<h3 id="orgf509466">What about more?</h3>
 <ul>
 <li>Eff</li>
 
 </ul>
 <div class="org-src-container">
 
-<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span>[<span style="color: #bbdaff;">R</span> <span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, ?] <span style="color: #bbdaff;">MemberIn</span> ?]<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Eff</span>[<span style="color: #bbdaff;">R</span>, <span style="color: #bbdaff;">URI</span>] <span style="color: #d1f1a9;">=</span> 
+<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span>[
+  <span style="color: #bbdaff;">R</span> <span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, ?] <span style="color: #bbdaff;">MemberIn</span> ?]<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Eff</span>[<span style="color: #bbdaff;">R</span>, <span style="color: #bbdaff;">URI</span>] <span style="color: #d1f1a9;">=</span> 
   send[<span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, ?], <span style="color: #bbdaff;">R</span>, <span style="color: #bbdaff;">URI</span>](???)
-<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getCountFromApi</span>[<span style="color: #bbdaff;">R</span> <span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, ?] <span style="color: #bbdaff;">MemberIn</span> ?](uri<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">URI</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Eff</span>[<span style="color: #bbdaff;">R</span>, <span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> 
+
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getCountFromApi</span>[
+  <span style="color: #bbdaff;">R</span> <span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, ?] <span style="color: #bbdaff;">MemberIn</span> ?](uri<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">URI</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Eff</span>[<span style="color: #bbdaff;">R</span>, <span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> 
   send[<span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, ?], <span style="color: #bbdaff;">R</span>, <span style="color: #bbdaff;">Int</span>](???)
 
 <span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">count</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Eff</span>[<span style="color: #bbdaff;">R</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, ?] <span style="color: #bbdaff;">MemberIn</span> ?
@@ -917,8 +919,8 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </section>
 </section>
 <section>
-<section id="slide-org96fad85">
-<h2 id="org96fad85">Monadic in production</h2>
+<section id="slide-orgcdd6184">
+<h2 id="orgcdd6184">Monadic in production</h2>
 <aside class="notes">
 <p>
 除了 Eff 这类 函数库工具外, 在产品中应用 Monadic, 还需要很多其他的帮助
@@ -927,8 +929,8 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </aside>
 
 </section>
-<section id="slide-org4347a8a">
-<h3 id="org4347a8a">FP Library</h3>
+<section id="slide-org6b79467">
+<h3 id="org6b79467">FP Library</h3>
 <ul>
 <li>cats</li>
 <li>scalaz</li>
@@ -943,22 +945,22 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </aside>
 
 </section>
-<section id="slide-orge3ccf5c">
-<h3 id="orge3ccf5c">Monadic framework</h3>
+<section id="slide-org75d13d5">
+<h3 id="org75d13d5">Monadic framework</h3>
 <p>
 Play, Akka, Unfiltered, Scalatra
 </p>
 
 </section>
-<section id="slide-org24a2722">
-<h3 id="org24a2722">Other Library</h3>
+<section id="slide-orgac5713d">
+<h3 id="orgac5713d">Other Library</h3>
 <p>
 <a href="https://github.com/lauris/awesome-scala">https://github.com/lauris/awesome-scala</a>
 </p>
 
 </section>
-<section id="slide-org23ec8ec">
-<h3 id="org23ec8ec">Monadic in Other Languages</h3>
+<section id="slide-org33fcd6a">
+<h3 id="org33fcd6a">Monadic in Other Languages</h3>
 <ul>
 <li>JS: monet.js, lodash/fp</li>
 <li>Ruby: monads</li>
@@ -968,8 +970,8 @@ Play, Akka, Unfiltered, Scalatra
 </section>
 </section>
 <section>
-<section id="slide-org00e6547">
-<h2 id="org00e6547">Should we use it?</h2>
+<section id="slide-org880ca96">
+<h2 id="org880ca96">Should we use it?</h2>
 <aside class="notes">
 <p>
 怎样确定在产品中是否采用某一技术或某一语言?
@@ -988,8 +990,8 @@ Play, Akka, Unfiltered, Scalatra
 </section>
 </section>
 <section>
-<section id="slide-org1aad24c">
-<h2 id="org1aad24c">Thank you</h2>
+<section id="slide-orgda5729a">
+<h2 id="orgda5729a">Thank you</h2>
 <p>
 Bye.
 </p>
