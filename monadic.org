@@ -22,9 +22,9 @@
 #+BEGIN_NOTES
 - 就在前不久, 我们团队使用 Scala 编写了一堆的 Monadic 的服务逻辑, 并将其部署在 AWS lambda 上, 再结合 AWS API GateWay, DynamoDB, 以及 ElasticSearch Service, 完成了一整套 microservice 的发布.
 
-- 所以, 今天想和大家聊一聊 Scala 和 Monadic 编程的事.
+- 所以, 今天想和大家聊一聊 Scala 和 Monadic 编程的话题.
 
-- Monadic programming 里有很多的抽象概念, 有很多人花费数月甚至几年来理解和学习这些东西, 所以 _试图在1个小时给大家讲明白说清楚是不太可能的_ . 所以今天的讨论主要涉及 _一些基本概念以及方法论_ , 点到为止. 如果大家对其中某些概念或思想想要深入了解, 也欢迎在这次分享之后和我联系.
+- 但是 Monadic programming 里有很多的抽象概念, 有很多人花费数月甚至几年来理解和学习这些东西, 所以 _试图在1个小时给大家讲明白说清楚是不太可能的_ . 所以今天的讨论主要涉及 _一些基本概念以及方法论_ , 点到为止. 如果大家对其中某些概念或思想想要深入了解, 也欢迎在这次分享之后和我联系.
 
 - 调查: 多少人使用过 Scala? 对其基本语法有所了解? 在产品中使用过?
 
@@ -32,13 +32,12 @@
 #+END_NOTES
 
 * Scala History
-** Before 2001
-Web Service 兴起 
-#+BEGIN_NOTES
-通常处理的是一种(半)结构化的不可变数据, 而当时对于 Web 服务端的语言来说, 选择是非常有限的.
-#+END_NOTES
 ** 2001
 Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Service 的, 集函数式特性与面向对象特性为一体的程序语言
+#+BEGIN_NOTES
+Web Service 兴起 
+通常处理的是一种(半)结构化的不可变数据, 而当时对于 Web 服务端的语言来说, 选择是非常有限的.
+#+END_NOTES
 ** 2004
 *Scala* 的 Java 平台和 .Net 平台 1.0 版本先后发布
 #+BEGIN_NOTES
@@ -46,8 +45,7 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 #+END_NOTES
 ** 2006
 *Scala* 2.0 版本问世. 其编译器由 Scala 编写.
-** 2007
-被需求驱动快速发布包含新特性的子版本.
+之后, 被需求驱动持续发布多个包含新特性的子版本.
 #+BEGIN_NOTES
 其实是被各种公司和理论研究人员要求.
 #+END_NOTES
@@ -91,7 +89,7 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 </table>
 #+END_EXPORT
 #+BEGIN_NOTES
-06年, twitter就宣布已经将大部分服务代码由 ruby 转为 Scala. 而苹果公司现在也在使用 Scala 的 play 构建服务.
+06年, twitter就宣布已经将大部分服务代码由 ruby 转为 Scala (finagle). 而苹果公司现在也在使用 Scala 的 play 构建服务.
 #+END_NOTES
 
 * Why Should I Learn Scala?
@@ -113,7 +111,7 @@ Where the name =Scala= came from.
 #+BEGIN_NOTES
 可伸缩性
 Scalable + Language
-- Scripting: REPL (Read-eval-print loop) / Worksheet 
+- Scripting: REPL (Read-eval-print loop) / Worksheet / sbt tool
 - Enterprise Applications: Native concurrency and parallel calculation support
 #+END_NOTES
 
@@ -238,7 +236,7 @@ class List[F[_]] {}
 
 *** Monad: 一类物理特性和逻辑特性相同的数据结构的统称
 
-*** 1. Monad 的物理特性
+*** Monad 的物理特性
 #+BEGIN_SRC scala 
 object Monad[F[_]] {
   def pure[A](a: => A): F[A]                      // point
@@ -257,7 +255,7 @@ class F[A] {
 }
 #+END_SRC
 
-*** 2. Monad 的逻辑特性 (Monad laws)
+*** Monad 的逻辑特性 (Monad laws)
 - Left identity (左同一律)
 #+BEGIN_SRC scala 
 val f: A => F[B] = ???
@@ -363,17 +361,14 @@ Either 这个 monad 有什么用呢?
 
 ** Either 的用法实例
 #+BEGIN_SRC scala 
-def userInputName: Either[String] = ???
-def findInvoiceFromDatabaseBy(name: String): Either[Invoice] = ???
-def getJsonFromInvoice(invoice: Invoice): Json = ???
-val json = userInputName.flatMap { name => 
-  findInvoiceFromDatabaseBy(name) => { invoice =>
-    getJsonFromInvoice(invoice)
-  }
-}
-#+END_SRC
-更 scala 的写法是
-#+BEGIN_SRC scala 
+def userInputName: Either[Error, String] = ???
+
+def findInvoiceFromDatabaseBy(name: String): 
+  Either[Error, Invoice] = ???
+
+def getJsonFromInvoice(invoice: Invoice): 
+  Either[Error, Json] = ???
+
 val json = for {
   name <- userInputName
   invoice <- findInvoiceFromDatabaseBy(name)
@@ -516,7 +511,9 @@ val count: Eff[R: Reader[Config, ?] MemberIn ?
   count <- getCountFromApi(uri)
 } yield count
 #+END_SRC
+#+BEGIN_NOTES
 -  FreeK
+#+END_NOTES
 
 * Monadic in production
 #+BEGIN_NOTES
@@ -545,7 +542,7 @@ https://github.com/lauris/awesome-scala
 #+BEGIN_NOTES
 怎样确定在产品中是否采用某一技术或某一语言?
 除了该技术或语言本身能否满足产品的当前需求及未来的需求变化外, 
-一个重要的评价标准: 一项新的技术, 一门新的语言, 如果你所在的团队里, 所有人在了解交付计划的情况下, 都觉得OK.
+Ken 一个重要的评价标准: 一项新的技术, 一门新的语言, 如果你所在的团队里, 所有人在了解交付计划的情况下, 都觉得OK.
 团队成功才是真的成功, 强行推广一项技术或语言, 很容易导致产品失败.
 当然也需要根据团队人员流动速率, 团队技术未来的发展愿景等多方面因素来确定.
 

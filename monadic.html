@@ -31,15 +31,15 @@
 </section>
 
 <section>
-<section id="slide-org9ba432a">
-<h2 id="org9ba432a">Why</h2>
+<section id="slide-orgc15d098">
+<h2 id="orgc15d098">Why</h2>
 <aside class="notes">
 <ul>
 <li>就在前不久, 我们团队使用 Scala 编写了一堆的 Monadic 的服务逻辑, 并将其部署在 AWS lambda 上, 再结合 AWS API GateWay, DynamoDB, 以及 ElasticSearch Service, 完成了一整套 microservice 的发布.</li>
 
-<li>所以, 今天想和大家聊一聊 Scala 和 Monadic 编程的事.</li>
+<li>所以, 今天想和大家聊一聊 Scala 和 Monadic 编程的话题.</li>
 
-<li>Monadic programming 里有很多的抽象概念, 有很多人花费数月甚至几年来理解和学习这些东西, 所以 <span class="underline">试图在1个小时给大家讲明白说清楚是不太可能的</span> . 所以今天的讨论主要涉及 <span class="underline">一些基本概念以及方法论</span> , 点到为止. 如果大家对其中某些概念或思想想要深入了解, 也欢迎在这次分享之后和我联系.</li>
+<li>但是 Monadic programming 里有很多的抽象概念, 有很多人花费数月甚至几年来理解和学习这些东西, 所以 <span class="underline">试图在1个小时给大家讲明白说清楚是不太可能的</span> . 所以今天的讨论主要涉及 <span class="underline">一些基本概念以及方法论</span> , 点到为止. 如果大家对其中某些概念或思想想要深入了解, 也欢迎在这次分享之后和我联系.</li>
 
 <li>调查: 多少人使用过 Scala? 对其基本语法有所了解? 在产品中使用过?</li>
 
@@ -54,30 +54,25 @@
 </section>
 </section>
 <section>
-<section id="slide-org4dd3126">
-<h2 id="org4dd3126">Scala History</h2>
-<div class="outline-text-2" id="text-org4dd3126">
+<section id="slide-org8c752a4">
+<h2 id="org8c752a4">Scala History</h2>
+<div class="outline-text-2" id="text-org8c752a4">
 </div></section>
-<section id="slide-orga2a6b7f">
-<h3 id="orga2a6b7f">Before 2001</h3>
+<section id="slide-org7c5fbca">
+<h3 id="org7c5fbca">2001</h3>
 <p>
-Web Service 兴起 
+Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Service 的, 集函数式特性与面向对象特性为一体的程序语言
 </p>
 <aside class="notes">
 <p>
+Web Service 兴起 
 通常处理的是一种(半)结构化的不可变数据, 而当时对于 Web 服务端的语言来说, 选择是非常有限的.
 </p>
 
 </aside>
 </section>
-<section id="slide-org43dfccc">
-<h3 id="org43dfccc">2001</h3>
-<p>
-Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Service 的, 集函数式特性与面向对象特性为一体的程序语言
-</p>
-</section>
-<section id="slide-orgccd4bbe">
-<h3 id="orgccd4bbe">2004</h3>
+<section id="slide-orgb8079b7">
+<h3 id="orgb8079b7">2004</h3>
 <p>
 <b>Scala</b> 的 Java 平台和 .Net 平台 1.0 版本先后发布
 </p>
@@ -88,16 +83,11 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 
 </aside>
 </section>
-<section id="slide-orgb493498">
-<h3 id="orgb493498">2006</h3>
+<section id="slide-org4d64456">
+<h3 id="org4d64456">2006</h3>
 <p>
 <b>Scala</b> 2.0 版本问世. 其编译器由 Scala 编写.
-</p>
-</section>
-<section id="slide-orgeb86678">
-<h3 id="orgeb86678">2007</h3>
-<p>
-被需求驱动快速发布包含新特性的子版本.
+之后, 被需求驱动持续发布多个包含新特性的子版本.
 </p>
 <aside class="notes">
 <p>
@@ -106,14 +96,14 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 
 </aside>
 </section>
-<section id="slide-orga004ef2">
-<h3 id="orga004ef2">2012</h3>
+<section id="slide-orgc67c70e">
+<h3 id="orgc67c70e">2012</h3>
 <p>
 <b>Scala</b> 2.10 版本, 支持了隐式转换, 宏与反射.
 </p>
 </section>
-<section id="slide-org7e897a5">
-<h3 id="org7e897a5">2014</h3>
+<section id="slide-org27fafe1">
+<h3 id="org27fafe1">2014</h3>
 <p>
 <b>Scala.js</b> 0.1 版本发布.
 </p>
@@ -128,8 +118,8 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 </section>
 </section>
 <section>
-<section id="slide-orgd2d7b26">
-<h2 id="orgd2d7b26">Who is using Scala</h2>
+<section id="slide-org4346761">
+<h2 id="org4346761">Who is using Scala</h2>
 <table>
   <tr>
     <td style="border:0">
@@ -158,7 +148,7 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 </table>
 <aside class="notes">
 <p>
-06年, twitter就宣布已经将大部分服务代码由 ruby 转为 Scala. 而苹果公司现在也在使用 Scala 的 play 构建服务.
+06年, twitter就宣布已经将大部分服务代码由 ruby 转为 Scala (finagle). 而苹果公司现在也在使用 Scala 的 play 构建服务.
 </p>
 
 </aside>
@@ -166,12 +156,12 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 </section>
 </section>
 <section>
-<section id="slide-orgbb75466">
-<h2 id="orgbb75466">Why Should I Learn Scala?</h2>
-<div class="outline-text-2" id="text-orgbb75466">
+<section id="slide-org47b1b6f">
+<h2 id="org47b1b6f">Why Should I Learn Scala?</h2>
+<div class="outline-text-2" id="text-org47b1b6f">
 </div></section>
-<section id="slide-orgef5dbcf">
-<h3 id="orgef5dbcf">Write concise and clear code</h3>
+<section id="slide-org592ed8f">
+<h3 id="org592ed8f">Write concise and clear code</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">case</span> <span style="color: #d1f1a9;">class</span> <span style="color: #bbdaff;">Person</span>(firstName<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>, lastName<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>)
@@ -193,8 +183,8 @@ Martin Odersky 基于 Funnel 语言为原型, 开始设计一种针对 Web Servi
 </aside>
 
 </section>
-<section id="slide-orga80a1c9">
-<h3 id="orga80a1c9">Scalable</h3>
+<section id="slide-org6db65e0">
+<h3 id="org6db65e0">Scalable</h3>
 <p>
 Where the name <code>Scala</code> came from. 
 </p>
@@ -204,7 +194,7 @@ Where the name <code>Scala</code> came from.
 Scalable + Language
 </p>
 <ul>
-<li>Scripting: REPL (Read-eval-print loop) / Worksheet</li>
+<li>Scripting: REPL (Read-eval-print loop) / Worksheet / sbt tool</li>
 <li>Enterprise Applications: Native concurrency and parallel calculation support</li>
 
 </ul>
@@ -212,20 +202,20 @@ Scalable + Language
 </aside>
 
 </section>
-<section id="slide-org4ec2229">
-<h3 id="org4ec2229">Easy to maintain</h3>
-<div class="outline-text-3" id="text-org4ec2229">
+<section id="slide-org16d7e6b">
+<h3 id="org16d7e6b">Easy to maintain</h3>
+<div class="outline-text-3" id="text-org16d7e6b">
 </div></section>
-<section id="slide-org0dc91bc">
-<h4 id="org0dc91bc">1. Immutable</h4>
+<section id="slide-orgddb6d85">
+<h4 id="orgddb6d85">1. Immutable</h4>
 <p>
 Find the lady (three-card monte)
 <img src="./images/3cardmonte.jpg" alt="3cardmonte.jpg" />
 </p>
 
 </section>
-<section id="slide-org75b04f9">
-<h4 id="org75b04f9">2. (Relatively) Readable</h4>
+<section id="slide-org8611d5e">
+<h4 id="org8611d5e">2. (Relatively) Readable</h4>
 <p>
 Document OR Source Code?
 </p>
@@ -256,8 +246,8 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 </aside>
 
 </section>
-<section id="slide-orgbab6bfd">
-<h3 id="orgbab6bfd">Platform and Libraries support</h3>
+<section id="slide-orga71901f">
+<h3 id="orga71901f">Platform and Libraries support</h3>
 <ul>
 <li>All the advantages of running on JVM (Diagnostic, Tools, GC, etc.)</li>
 
@@ -268,18 +258,18 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 </ul>
 
 </section>
-<section id="slide-orgb808493">
-<h3 id="orgb808493">Listen to us</h3>
+<section id="slide-org4b633f7">
+<h3 id="org4b633f7">Listen to us</h3>
 
 </section>
 </section>
 <section>
-<section id="slide-orgfd85475">
-<h2 id="orgfd85475">Less well</h2>
-<div class="outline-text-2" id="text-orgfd85475">
+<section id="slide-orge45b39a">
+<h2 id="orge45b39a">Less well</h2>
+<div class="outline-text-2" id="text-orge45b39a">
 </div></section>
-<section id="slide-org94733d4">
-<h3 id="org94733d4">Steep learning curve</h3>
+<section id="slide-org8b0c4e7">
+<h3 id="org8b0c4e7">Steep learning curve</h3>
 
 <div class="figure">
 <p><img src="./images/learningcurve.png" alt="learningcurve.png" />
@@ -293,8 +283,8 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 </aside>
 
 </section>
-<section id="slide-org8ff49e9">
-<h3 id="org8ff49e9">Flexible</h3>
+<section id="slide-orgc6659b1">
+<h3 id="orgc6659b1">Flexible</h3>
 <ul>
 <li><b>Flexibility</b> comes at the price of <b>Simplicity</b>.</li>
 <li>So many <b>Concepts</b> &amp; <b>Features</b>.</li>
@@ -313,8 +303,8 @@ String Interpolation. Pattern match 等都使 Scala 成为一个可读性很强�
 </aside>
 
 </section>
-<section id="slide-org88e7fc4">
-<h3 id="org88e7fc4">Conflict with java library</h3>
+<section id="slide-org6a64fa3">
+<h3 id="org6a64fa3">Conflict with java library</h3>
 <aside class="notes">
 <p>
 Scala 的代码有自己的一套 convention 及 style, 当使用 java 类库时, 有时需要一些额外代码将类库提供的 java 风格的接口转为 Scala 风格的接口.
@@ -323,8 +313,8 @@ Scala 的代码有自己的一套 convention 及 style, 当使用 java 类库时
 </aside>
 
 </section>
-<section id="slide-org3cdce3a">
-<h3 id="org3cdce3a">Worth to know, worth to learn</h3>
+<section id="slide-org401223d">
+<h3 id="org401223d">Worth to know, worth to learn</h3>
 <p>
 You might fall in love with it.
 </p>
@@ -338,8 +328,8 @@ You might fall in love with it.
 </section>
 </section>
 <section>
-<section id="slide-orgf5cbd0b">
-<h2 id="orgf5cbd0b">Monadic Programming</h2>
+<section id="slide-org5a7e394">
+<h2 id="org5a7e394">Monadic Programming</h2>
 <p>
 通过 <b>Chainable</b> 的语言风格以 <b>纯函数</b> 的形式来描述对数据的处理流程.
 </p>
@@ -353,8 +343,8 @@ You might fall in love with it.
 
 </aside>
 </section>
-<section id="slide-org9f7d56b">
-<h3 id="org9f7d56b">What's effect?</h3>
+<section id="slide-org0473d25">
+<h3 id="org0473d25">What's effect?</h3>
 <aside class="notes">
 <p>
 不是纯的.
@@ -375,12 +365,12 @@ Effect 是 Side-effect (副作用) 的简称. 表示一个函数或表达式在�
 </div>
 
 </section>
-<section id="slide-org46a01f2">
-<h3 id="org46a01f2">没有 effect 我们还需要 Monadic programming 吗?</h3>
+<section id="slide-org71f5030">
+<h3 id="org71f5030">没有 effect 我们还需要 Monadic programming 吗?</h3>
 
 </section>
-<section id="slide-org0571907">
-<h3 id="org0571907">What's <b>Monad</b>?</h3>
+<section id="slide-org53d9217">
+<h3 id="org53d9217">What's <b>Monad</b>?</h3>
 
 <div class="figure">
 <p><img src="./images/everest.jpg" alt="everest.jpg" />
@@ -397,8 +387,8 @@ Monad 本来是范畴论里的一个数学概念, 因为函数式中的很多数
 </aside>
 
 </section>
-<section id="slide-org54d459f">
-<h3 id="org54d459f">A scary definition:</h3>
+<section id="slide-orga3072bf">
+<h3 id="orga3072bf">A scary definition:</h3>
 <p>
 Philip Wadler : 
 </p>
@@ -417,8 +407,8 @@ Monad 是自函子范畴上的一个含幺半群
 </aside>
 
 </section>
-<section id="slide-orga6e4e0a">
-<h3 id="orga6e4e0a">Type Constructor</h3>
+<section id="slide-orgc82193a">
+<h3 id="orgc82193a">Type Constructor</h3>
 <p>
 Java 里的泛型是一阶类型构造器 (first-order type) :
 </p>
@@ -452,12 +442,12 @@ Java 里的泛型是一阶类型构造器 (first-order type) :
 </div>
 
 </section>
-<section id="slide-org32e9497">
-<h4 id="org32e9497">Monad: 一类物理特性和逻辑特性相同的数据结构的统称</h4>
+<section id="slide-orgf986627">
+<h4 id="orgf986627">Monad: 一类物理特性和逻辑特性相同的数据结构的统称</h4>
 
 </section>
-<section id="slide-org2ede835">
-<h4 id="org2ede835">1. Monad 的物理特性</h4>
+<section id="slide-org4ef4404">
+<h4 id="org4ef4404">Monad 的物理特性</h4>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">object</span> <span style="color: #bbdaff;">Monad</span>[<span style="color: #bbdaff;">F</span>[<span style="color: #d1f1a9;">_</span>]] {
@@ -486,8 +476,8 @@ Java 里的泛型是一阶类型构造器 (first-order type) :
 </div>
 
 </section>
-<section id="slide-orgdd6d29b">
-<h4 id="orgdd6d29b">2. Monad 的逻辑特性 (Monad laws)</h4>
+<section id="slide-orgc7d1120">
+<h4 id="orgc7d1120">Monad 的逻辑特性 (Monad laws)</h4>
 <ul>
 <li>Left identity (左同一律)</li>
 
@@ -536,12 +526,12 @@ m.flatMap(f).flatMap(g) ===
 </section>
 </section>
 <section>
-<section id="slide-orge018839">
-<h2 id="orge018839">Monad Samples</h2>
-<div class="outline-text-2" id="text-orge018839">
+<section id="slide-org2ff186a">
+<h2 id="org2ff186a">Monad Samples</h2>
+<div class="outline-text-2" id="text-org2ff186a">
 </div></section>
-<section id="slide-org0aa5867">
-<h3 id="org0aa5867">A billion-dollar mistake</h3>
+<section id="slide-org93c2a7f">
+<h3 id="org93c2a7f">A billion-dollar mistake</h3>
 
 <div class="figure">
 <p><img src="./images/tony.jpg" alt="tony.jpg" />
@@ -562,8 +552,8 @@ m.flatMap(f).flatMap(g) ===
 </p>
 
 </section>
-<section id="slide-orgf3007b1">
-<h3 id="orgf3007b1">Option[A]</h3>
+<section id="slide-org77eba72">
+<h3 id="org77eba72">Option[A]</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Option</span>[+<span style="color: #bbdaff;">A</span>]
@@ -584,8 +574,8 @@ m.flatMap(f).flatMap(g) ===
 </div>
 
 </section>
-<section id="slide-org904ba7e">
-<h3 id="org904ba7e">怎么用?</h3>
+<section id="slide-org0954407">
+<h3 id="org0954407">怎么用?</h3>
 <p>
 考虑有两个值, 
 </p>
@@ -597,8 +587,8 @@ m.flatMap(f).flatMap(g) ===
 </ul>
 
 </section>
-<section id="slide-org826e834">
-<h3 id="org826e834">Option 的用法实例</h3>
+<section id="slide-org3446fb4">
+<h3 id="org3446fb4">Option 的用法实例</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">value1</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Option</span>[<span style="color: #bbdaff;">Int</span>] <span style="color: #d1f1a9;">=</span> ???
@@ -641,8 +631,8 @@ Option 能够做到
 </aside>
 
 </section>
-<section id="slide-org415f24c">
-<h3 id="org415f24c">Either (Disjunction, Xor)</h3>
+<section id="slide-org5682979">
+<h3 id="org5682979">Either (Disjunction, Xor)</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">trait</span> <span style="color: #bbdaff;">Either</span>[+<span style="color: #bbdaff;">A</span>, +<span style="color: #bbdaff;">B</span>]
@@ -667,26 +657,19 @@ Either 这个 monad 有什么用呢?
 </ul>
 
 </section>
-<section id="slide-orge01554c">
-<h3 id="orge01554c">Either 的用法实例</h3>
+<section id="slide-org15df8ff">
+<h3 id="org15df8ff">Either 的用法实例</h3>
 <div class="org-src-container">
 
-<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">userInputName</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">String</span>] <span style="color: #d1f1a9;">=</span> ???
-<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">findInvoiceFromDatabaseBy</span>(name<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Invoice</span>] <span style="color: #d1f1a9;">=</span> ???
-<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getJsonFromInvoice</span>(invoice<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Invoice</span>)<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Json</span> <span style="color: #d1f1a9;">=</span> ???
-<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">json</span> <span style="color: #d1f1a9;">=</span> userInputName.flatMap { name <span style="color: #d1f1a9;">=&gt;</span> 
-  findInvoiceFromDatabaseBy(name) <span style="color: #d1f1a9;">=&gt;</span> { invoice <span style="color: #d1f1a9;">=&gt;</span>
-    getJsonFromInvoice(invoice)
-  }
-}
-</pre>
-</div>
-<p>
-更 scala 的写法是
-</p>
-<div class="org-src-container">
+<pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">userInputName</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">String</span>] <span style="color: #d1f1a9;">=</span> ???
 
-<pre  class="src src-scala"><span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">json</span> <span style="color: #d1f1a9;">=</span> <span style="color: #d1f1a9;">for</span> {
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">findInvoiceFromDatabaseBy</span>(name<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">String</span>)<span style="color: #d1f1a9;">:</span> 
+  <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">Invoice</span>] <span style="color: #d1f1a9;">=</span> ???
+
+<span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getJsonFromInvoice</span>(invoice<span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Invoice</span>)<span style="color: #d1f1a9;">:</span> 
+  <span style="color: #bbdaff;">Either</span>[<span style="color: #bbdaff;">Error</span>, <span style="color: #bbdaff;">Json</span>] <span style="color: #d1f1a9;">=</span> ???
+
+<span style="color: #d1f1a9;">val</span> <span style="color: #ffeead;">json</span> <span style="color: #d1f1a9;">=</span> <span style="color: #d1f1a9;">for</span> {
   name <span style="color: #d1f1a9;">&lt;-</span> userInputName
   invoice <span style="color: #d1f1a9;">&lt;-</span> findInvoiceFromDatabaseBy(name)
   json <span style="color: #d1f1a9;">&lt;-</span> getJsonFromInvoice(invoice)
@@ -708,8 +691,8 @@ Either 能够做到
 </aside>
 
 </section>
-<section id="slide-org8584b45">
-<h3 id="org8584b45">Reader</h3>
+<section id="slide-orgd745b42">
+<h3 id="orgd745b42">Reader</h3>
 <aside class="notes">
 <p>
 Scala 原生提供的 monad 除了 Option 和 Either 还有很多, 例如 List, Map, Try, Future 等等.
@@ -736,8 +719,8 @@ Scala 原生提供的 monad 除了 Option 和 Either 还有很多, 例如 List, 
 </p>
 
 </section>
-<section id="slide-orgd289bd9">
-<h3 id="orgd289bd9">Reader 的用法实例</h3>
+<section id="slide-orgf12bcf2">
+<h3 id="orgf12bcf2">Reader 的用法实例</h3>
 <div class="org-src-container">
 
 <pre  class="src src-scala"><span style="color: #d1f1a9;">def</span> <span style="color: #ffc58f;">getApiEndpoint</span><span style="color: #d1f1a9;">:</span> <span style="color: #bbdaff;">Reader</span>[<span style="color: #bbdaff;">Config</span>, <span style="color: #bbdaff;">URI</span>] <span style="color: #d1f1a9;">=</span> 
@@ -767,8 +750,8 @@ Reader 能够做到
 </aside>
 
 </section>
-<section id="slide-orgcdd82bd">
-<h3 id="orgcdd82bd">Free &amp; Interpreter Pattern</h3>
+<section id="slide-org5bb9092">
+<h3 id="org5bb9092">Free &amp; Interpreter Pattern</h3>
 
 <div class="figure">
 <p><img src="./images/free.jpg" alt="free.jpg" />
@@ -785,8 +768,8 @@ Free 是 Effect isolation 的典型, 它能够将可变部分从处理流程中�
 </aside>
 
 </section>
-<section id="slide-org5b07325">
-<h3 id="org5b07325">Free &amp; Interpreter Pattern</h3>
+<section id="slide-org4588b2a">
+<h3 id="org4588b2a">Free &amp; Interpreter Pattern</h3>
 
 <div class="figure">
 <p><img src="./images/free2.jpg" alt="free2.jpg" />
@@ -802,8 +785,8 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </aside>
 
 </section>
-<section id="slide-org7053804">
-<h3 id="org7053804">好处:</h3>
+<section id="slide-orgc70ffb8">
+<h3 id="orgc70ffb8">好处:</h3>
 <ul>
 <li>处理逻辑的解耦</li>
 
@@ -829,12 +812,12 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </section>
 </section>
 <section>
-<section id="slide-org45a30ef">
-<h2 id="org45a30ef">Composable Monad</h2>
-<div class="outline-text-2" id="text-org45a30ef">
+<section id="slide-org5475aa1">
+<h2 id="org5475aa1">Composable Monad</h2>
+<div class="outline-text-2" id="text-org5475aa1">
 </div></section>
-<section id="slide-org8020869">
-<h3 id="org8020869">Monad Transformer</h3>
+<section id="slide-org8d8dc23">
+<h3 id="org8d8dc23">Monad Transformer</h3>
 <aside class="notes">
 <p>
 生产中, 由于业务逻辑的复杂程度不一, 很多情况下需要使用多个 Monad, 例如 ...
@@ -864,8 +847,8 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </div>
 
 </section>
-<section id="slide-org68dba1a">
-<h3 id="org68dba1a">EitherT</h3>
+<section id="slide-org4d6e296">
+<h3 id="org4d6e296">EitherT</h3>
 <aside class="notes">
 <p>
 在 Monad 数量较少的时候 (234个) 可以使用 Monad Transformer
@@ -888,8 +871,8 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </div>
 
 </section>
-<section id="slide-orgf509466">
-<h3 id="orgf509466">What about more?</h3>
+<section id="slide-org5786aa0">
+<h3 id="org5786aa0">What about more?</h3>
 <ul>
 <li>Eff</li>
 
@@ -911,16 +894,19 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 } <span style="color: #d1f1a9;">yield</span> count
 </pre>
 </div>
+<aside class="notes">
 <ul>
 <li>FreeK</li>
 
 </ul>
 
+</aside>
+
 </section>
 </section>
 <section>
-<section id="slide-orgcdd6184">
-<h2 id="orgcdd6184">Monadic in production</h2>
+<section id="slide-org42853fc">
+<h2 id="org42853fc">Monadic in production</h2>
 <aside class="notes">
 <p>
 除了 Eff 这类 函数库工具外, 在产品中应用 Monadic, 还需要很多其他的帮助
@@ -929,8 +915,8 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </aside>
 
 </section>
-<section id="slide-org6b79467">
-<h3 id="org6b79467">FP Library</h3>
+<section id="slide-orgbed3fae">
+<h3 id="orgbed3fae">FP Library</h3>
 <ul>
 <li>cats</li>
 <li>scalaz</li>
@@ -945,22 +931,22 @@ Free Monad 能够将我们所定义的标记和木板上的代码逻辑组合在
 </aside>
 
 </section>
-<section id="slide-org75d13d5">
-<h3 id="org75d13d5">Monadic framework</h3>
+<section id="slide-org3b09957">
+<h3 id="org3b09957">Monadic framework</h3>
 <p>
 Play, Akka, Unfiltered, Scalatra
 </p>
 
 </section>
-<section id="slide-orgac5713d">
-<h3 id="orgac5713d">Other Library</h3>
+<section id="slide-org49e943a">
+<h3 id="org49e943a">Other Library</h3>
 <p>
 <a href="https://github.com/lauris/awesome-scala">https://github.com/lauris/awesome-scala</a>
 </p>
 
 </section>
-<section id="slide-org33fcd6a">
-<h3 id="org33fcd6a">Monadic in Other Languages</h3>
+<section id="slide-org3e05b5a">
+<h3 id="org3e05b5a">Monadic in Other Languages</h3>
 <ul>
 <li>JS: monet.js, lodash/fp</li>
 <li>Ruby: monads</li>
@@ -970,8 +956,8 @@ Play, Akka, Unfiltered, Scalatra
 </section>
 </section>
 <section>
-<section id="slide-org880ca96">
-<h2 id="org880ca96">Should we use it?</h2>
+<section id="slide-org3a80824">
+<h2 id="org3a80824">Should we use it?</h2>
 <aside class="notes">
 <p>
 怎样确定在产品中是否采用某一技术或某一语言?
@@ -990,8 +976,8 @@ Play, Akka, Unfiltered, Scalatra
 </section>
 </section>
 <section>
-<section id="slide-orgda5729a">
-<h2 id="orgda5729a">Thank you</h2>
+<section id="slide-org116ab9e">
+<h2 id="org116ab9e">Thank you</h2>
 <p>
 Bye.
 </p>
